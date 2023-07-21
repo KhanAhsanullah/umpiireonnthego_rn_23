@@ -89,11 +89,11 @@ const Splash = (props: any) => {
               On The Go
             </Typography>
 
-            {/* <View style={{ width: "100%" }}>
+            <View style={{ width: "100%" }}>
               <Button label={'Get Started'} onPress={() => {
                 store.dispatch(updateAppStates({ splash: false }))
               }} backgroundColor={COLORS.primary} borderRadius={10} />
-            </View> */}
+            </View>
           </View>
         </ImageBackground>
       </View>
