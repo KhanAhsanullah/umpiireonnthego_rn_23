@@ -11,7 +11,7 @@ import IconIonic from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../../navigation/RootNavigation';
 const Home = (props: any) => {
-	const [radioTab, setRadioTab] = useState('');
+	const [radioTab, setRadioTab] = useState('Open');
 	const changeTab = (item: any) => {
 		setRadioTab(item);
 	};
@@ -40,7 +40,7 @@ const Home = (props: any) => {
 									onPress={() => { changeTab(item.title) }}
 									style={[styles.tab]}
 								>
-									<Typography color={txtColor} size={16}>
+									<Typography color={txtColor} size={14}>
 										{item.title}
 									</Typography>
 								</TouchableOpacity>
@@ -58,6 +58,8 @@ const Home = (props: any) => {
 			<ScrollView style={styles.container}>
 				<View style={[commonStyles.headerView, styles.subContainer]}>
 					<HomeHeader />
+				</View>
+				<View style={[commonStyles.cardWithShadow, { marginTop: -20 }]}>
 					<LocationTabPicker />
 				</View>
 				<FlatList
@@ -88,14 +90,17 @@ const HomeHeader = () => {
 				Games
 			</Typography>
 			<TouchableOpacity
-				onPress={() => navigate('AssignGame')}
+				onPress={() => navigate('AssignGame',
+					{
+						title: "Assign Game"
+					}
+				)}
 				style={styles.headerBkStyle}>
 				<Typography color={COLORS.primary}>+ Assign</Typography>
 			</TouchableOpacity>
 		</View>
 	);
 };
-
 const HomeCard = ({ item }: any) => {
 	return (
 		<TouchableOpacity
@@ -151,10 +156,12 @@ const HomeCard = ({ item }: any) => {
 						<Typography style={{ marginLeft: 10, }} color="#fff">{item.teamPlayer}</Typography>
 					</View>
 
-					<View style={commonStyles.flexRowAlign}>
+					<TouchableOpacity onPress={() => navigate('AssignGame', {
+						title: "Edit Game"
+					})} style={commonStyles.flexRowAlign}>
 						<Icon name="playlist-edit" color="#fff" size={20} />
 						<Typography color="#fff" style={{ marginLeft: 10, }}>Edit Info</Typography>
-					</View>
+					</TouchableOpacity>
 				</View>
 			</LinearGradient>
 		</TouchableOpacity>
@@ -219,6 +226,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
+		marginVertical: 20
 	},
 	headerBkStyle: {
 		padding: 5,
@@ -261,7 +269,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		flexWrap: 'wrap',
-		marginVertical: 10,
 		justifyContent: 'space-between',
 	},
 	tab: {

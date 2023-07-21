@@ -15,9 +15,9 @@ import { selectUserState } from '../store/selectors/userSelector';
 import { commonStyles } from '../style';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconIonic from 'react-native-vector-icons/Ionicons';
-import { navigate, onBack, reset } from './RootNavigation';
 import store from '../store';
 import { updateAppStates } from '../store/actions/AppActions';
+import { logoutApi } from '../store/services/AuthServices';
 
 // import { logoutApi } from '../../store/services/AuthServices';
 // import { useSelector } from 'react-redux';
@@ -30,7 +30,7 @@ const DrawerScreen = (props: any) => {
         <SafeAreaContainer >
             <View style={styles.container}>
                 <TouchableOpacity
-                    style={styles.headerBkStyle}
+                    style={[styles.headerBkStyle]}
                     onPress={() => props.navigation.goBack()}>
                     <IconIonic name='menu' size={26} color={COLORS.primary} />
                 </TouchableOpacity>
@@ -70,12 +70,13 @@ const styles = StyleSheet.create({
         width: '70%',
         backgroundColor: COLORS.secondary,
         padding: 20,
-        marginTop: 30,
+        marginTop: 50,
     },
     headerBkStyle: {
         position: 'absolute',
         right: 0,
-        top: -10,
+        top: 20,
+        padding: 10,
         width: 50,
         borderRadius: 10,
         backgroundColor: COLORS.bkColor,
@@ -126,11 +127,10 @@ const onLogout = () => {
         },
         {
             text: 'OK',
-            onPress: () => {
-                store.dispatch(
-                    updateAppStates({ is_authorized: false, }));
-
-            },
+            // onPress: () => {
+            //     store.dispatch(updateAppStates({ is_authorized: false, }));
+            // },
+            onPress: () => logoutApi({ device_token: '' }),
         },
     ]);
 };
@@ -159,7 +159,7 @@ const DrawerContent = [
     {
         id: 5,
         title: 'CHANGE PASSWORD',
-        navigateTo: '',
+        navigateTo: 'ChangePassword',
     },
     {
         id: 6,

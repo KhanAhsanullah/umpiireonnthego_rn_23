@@ -72,7 +72,7 @@ const HomeCard = ({ item }: any) => {
 					<View style={{ alignItems: "flex-end" }}>
 						<Typography color='#fff'>{item.date}</Typography>
 						<Icon name="md-checkmark-done-sharp" size={15}
-
+							color="#fff"
 						/>
 					</View>
 				</View>

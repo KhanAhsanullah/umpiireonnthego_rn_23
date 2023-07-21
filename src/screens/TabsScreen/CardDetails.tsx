@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
-import { COLORS, IMAGES, screenHeight } from '../../constants';
-import { Button, Typography } from '../../components/atoms';
+import React, { useState } from 'react';
+import { StyleSheet, View, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { COLORS, IMAGES } from '../../constants';
+import { Button, Header, Typography } from '../../components/atoms';
 import SafeAreaContainer from '../../containers/SafeAreaContainer';
 import { commonStyles } from '../../style';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,7 +11,7 @@ import IconMat from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../../navigation/RootNavigation';
 const CardDetails = (props: any) => {
-	const [radioTab, setRadioTab] = useState('');
+	const [radioTab, setRadioTab] = useState('Details');
 	const changeTab = (item: any) => {
 		setRadioTab(item);
 	};
@@ -57,7 +57,12 @@ const CardDetails = (props: any) => {
 		<SafeAreaContainer safeArea={false}>
 			<ScrollView style={styles.container}>
 				<View style={[commonStyles.headerView, styles.subContainer]}>
-					<HomeHeader />
+					<Header
+						titleText='Intermediates B'
+						titleColor={COLORS.black}
+					/>
+				</View>
+				<View style={[commonStyles.cardWithShadow, { marginTop: -20 }]}>
 					<LocationTabPicker />
 				</View>
 				<HomeCard />
@@ -66,25 +71,6 @@ const CardDetails = (props: any) => {
 	);
 };
 
-const HomeHeader = (props: any) => {
-
-	return (
-		<View style={styles.headerStyle}>
-			<View />
-			{/* <TouchableOpacity style={styles.headerBkStyle}>
-				<IconIonic name='menu' size={26} color={COLORS.primary} />
-			</TouchableOpacity> */}
-			<Typography color={COLORS.black} size={22} >
-				Intermediates B
-			</Typography>
-			<TouchableOpacity
-				onPress={() => navigate('AssignGame')}
-				style={styles.headerBkStyle}>
-				<Icon name="playlist-edit" color={COLORS.primary} size={20} />
-			</TouchableOpacity>
-		</View>
-	);
-};
 const HomeCard = ({ item }: any) => {
 	return (
 		<View style={styles.registerView}>
@@ -127,7 +113,7 @@ const HomeCard = ({ item }: any) => {
 
 					<View>
 						<View>
-							<View style={{ flexDirection: "row", alignItems: "center" }}>
+							<View style={{ flexDirection: "row", alignItems: "center", }}>
 								<IconMat name="sports-soccer" color={COLORS.white} size={20} />
 								<Typography color='#fff' style={{ marginLeft: 10 }}>SPORT :</Typography>
 							</View>
@@ -139,16 +125,16 @@ const HomeCard = ({ item }: any) => {
 				<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
 					<View>
 						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<Icon name="calendar-month" color={COLORS.white} size={20} />
+							<Icon name="map-marker-radius" color={COLORS.white} size={20} />
 							<Typography color='#fff' style={{ marginLeft: 10 }}>ADDRESS :</Typography>
 						</View>
-						<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>New York Avenue Arlington, TX, USA</Typography>
+						<Typography color='#fff' size={10} style={{ marginLeft: 30, }}>New York Avenue Arlington{'\n'}TX, USA</Typography>
 					</View>
 
 					<View>
 						<View>
 							<View style={{ flexDirection: "row", alignItems: "center" }}>
-								<IconMat name="sports-soccer" color={COLORS.white} size={20} />
+								<IconFont name="user-circle" color={COLORS.white} size={20} />
 								<Typography color='#fff' style={{ marginLeft: 10 }}>POST BY :</Typography>
 							</View>
 							<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>James Nonat</Typography>
@@ -159,8 +145,8 @@ const HomeCard = ({ item }: any) => {
 				<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
 					<View>
 						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<Icon name="calendar-month" color={COLORS.white} size={20} />
-							<Typography color='#fff' style={{ marginLeft: 10 }}>DETAILS :</Typography>
+							<IconIonic name="information-circle" color={COLORS.white} size={20} />
+							<Typography color='#fff' style={{ marginLeft: 10 }}>DETAsad :</Typography>
 						</View>
 						<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remain essentially unchanged.</Typography>
 					</View>
@@ -168,8 +154,8 @@ const HomeCard = ({ item }: any) => {
 				<View style={{ marginVertical: 20 }}>
 					<Button label={'JOIN THIS GAME'} onPress={() => { navigate('Applicant') }} backgroundColor={COLORS.primary} borderRadius={10} />
 				</View>
-			</LinearGradient>
-		</View>
+			</LinearGradient >
+		</View >
 	);
 };
 
@@ -237,9 +223,10 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	locationTabStyle: {
-		marginTop: 50,
+		marginTop: 0,
 		marginHorizontal: 20,
 		flexDirection: 'row',
+		justifyContent: "center",
 		alignItems: 'center',
 	},
 	tab: {

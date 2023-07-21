@@ -5,6 +5,7 @@ import { Button, Header, InputText, Typography } from '../../components/atoms';
 import SafeAreaContainer from '../../containers/SafeAreaContainer';
 import { commonStyles } from '../../style';
 import ImagePicker from 'react-native-image-crop-picker';
+import { navigate } from '../../navigation/RootNavigation';
 
 const AssignGame = (props: any) => {
 	const [title, setTitle] = useState('');
@@ -27,6 +28,8 @@ const AssignGame = (props: any) => {
 	const [gameModal, setGameModal] = useState(false);
 	const [selectImg, setSelectImg] = useState('');
 	// const imageFromState = userState?.user?.profile_image;
+	const titleHeader = props.route.params.title;
+	console.log('title', titleHeader);
 
 	const takePhotoFromCamera = () => {
 		ImagePicker.openCamera({
@@ -72,7 +75,7 @@ const AssignGame = (props: any) => {
 			<ScrollView style={styles.container}>
 				<View style={[commonStyles.headerView, styles.subContainer]}>
 					<Header
-						titleText="Assign Games"
+						titleText={titleHeader}
 						titleColor={COLORS.black}
 					/>
 				</View>
@@ -87,7 +90,7 @@ const AssignGame = (props: any) => {
 								resizeMode='cover'
 							/>
 						) : (
-							<Image source={IMAGES.Umpire} style={{ width: 110, height: 110, borderRadius: 10, alignSelf: "center", }} resizeMode='cover' />
+							<Image source={IMAGES.VectorImg} style={{ width: 110, height: 110, borderRadius: 10, alignSelf: "center", }} resizeMode='cover' />
 						)}
 					</TouchableOpacity>
 					<InputText
@@ -179,6 +182,7 @@ const AssignGame = (props: any) => {
 						placeholder={'Details'}
 						onChangeText={(text: string) => setDetails(text)}
 						value={details}
+						multiline={true}
 						error={errors.email}
 						autoCapitalize={'none'}
 						keyboardType={'email-address'}
@@ -187,7 +191,7 @@ const AssignGame = (props: any) => {
 						onSubmitEditing={() => Keyboard.dismiss()}
 						leftIconVisibility={false}
 						allowSpacing={false}
-						inputStyle={{ paddingVertical: 50, backgroundColor: '#fff', }}
+						inputStyle={{ paddingVertical: 30, backgroundColor: '#fff', }}
 					/>
 					<Button label={'Assign Game'} onPress={() => {
 						setGameModal(true);
@@ -238,6 +242,7 @@ const AssignGame = (props: any) => {
 						<Typography size={26} style={{ marginVertical: 20, }}>Your Game has been uploaded successfully!</Typography>
 						<Button label={'View Your Game'} onPress={() => {
 							setGameModal(false);
+							navigate('CardDetails');
 						}} backgroundColor={COLORS.primary} borderRadius={10} />
 					</View>
 				</Modal>

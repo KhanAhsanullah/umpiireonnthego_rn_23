@@ -1,12 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { COLORS, IMAGES } from '../../constants';
-import { Button, Typography } from '../../components/atoms';
+import { Button, Header, Typography } from '../../components/atoms';
 import SafeAreaContainer from '../../containers/SafeAreaContainer';
 import { commonStyles } from '../../style';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconIonic from 'react-native-vector-icons/Ionicons';
 import IconMat from 'react-native-vector-icons/MaterialIcons';
+import IconFont from 'react-native-vector-icons/FontAwesome';
+import IconFont5 from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../../navigation/RootNavigation';
 const UmpireDetails = (props: any) => {
@@ -14,7 +16,11 @@ const UmpireDetails = (props: any) => {
 		<SafeAreaContainer safeArea={false}>
 			<ScrollView style={styles.container}>
 				<View style={[commonStyles.headerView, styles.subContainer]}>
-					<HomeHeader />
+					{/* <HomeHeader /> */}
+					<Header
+						titleText='Umpire’s request'
+						titleColor={COLORS.black}
+					/>
 				</View>
 				<HomeCard />
 			</ScrollView>
@@ -25,11 +31,11 @@ const UmpireDetails = (props: any) => {
 const HomeHeader = (props: any) => {
 	return (
 		<View style={styles.headerStyle}>
-			{/* <TouchableOpacity style={styles.headerBkStyle}>
-				<IconIonic name='menu' size={26} color={COLORS.primary} />
-			</TouchableOpacity> */}
+			<TouchableOpacity style={styles.headerBkStyle}>
+				<IconIonic name='menu' size={22} color={COLORS.primary} />
+			</TouchableOpacity>
 			<View />
-			<Typography color={COLORS.black} size={22} >
+			<Typography color={COLORS.black} size={20} >
 				Umpire’s request
 			</Typography>
 			<TouchableOpacity
@@ -63,7 +69,7 @@ const HomeCard = ({ item }: any) => {
 							<Icon name="calendar-month" color={COLORS.white} size={20} />
 							<Typography color='#fff' style={{ marginLeft: 10 }}>EMAIL :</Typography>
 						</View>
-						<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>info@demilonk.com</Typography>
+						<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>info@demilonk.com</Typography>
 					</View>
 					<View>
 						<View>
@@ -71,7 +77,7 @@ const HomeCard = ({ item }: any) => {
 								<IconMat name="sports-soccer" color={COLORS.white} size={20} />
 								<Typography color='#fff' style={{ marginLeft: 10 }}>Games :</Typography>
 							</View>
-							<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>Baseket Ball</Typography>
+							<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>Baseket Ball</Typography>
 						</View>
 					</View>
 				</View>
@@ -79,44 +85,44 @@ const HomeCard = ({ item }: any) => {
 				<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
 					<View>
 						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<Icon name="calendar-month" color={COLORS.white} size={20} />
+							<Icon name="map-marker-radius" color={COLORS.white} size={20} />
 							<Typography color='#fff' style={{ marginLeft: 10 }}>ADDRESS :</Typography>
 						</View>
-						<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>New York Avenue Arlington, TX, USA</Typography>
+						<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>New York Avenue Arlington,{'\n'}TX, USA</Typography>
 					</View>
 
 					<View>
 						<View>
 							<View style={{ flexDirection: "row", alignItems: "center" }}>
-								<IconMat name="sports-soccer" color={COLORS.white} size={20} />
+								<IconFont name="user-circle" color={COLORS.white} size={20} />
 								<Typography color='#fff' style={{ marginLeft: 10 }}>Gender :</Typography>
 							</View>
-							<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>Male</Typography>
+							<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>Male</Typography>
 						</View>
 					</View>
 				</View>
 				<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
 					<View>
 						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<Icon name="calendar-month" color={COLORS.white} size={20} />
+							<IconFont5 name="award" color={COLORS.white} size={20} />
 							<Typography color='#fff' style={{ marginLeft: 10 }}>EXPERINCE :</Typography>
 						</View>
-						<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>15 years of experience</Typography>
+						<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>15 years of experience</Typography>
 					</View>
 				</View>
 
 				<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
 					<View>
 						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<Icon name="calendar-month" color={COLORS.white} size={20} />
+							<IconIonic name="information-circle" color={COLORS.white} size={20} />
 							<Typography color='#fff' style={{ marginLeft: 10 }}>DETAILS :</Typography>
 						</View>
-						<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remain essentially unchanged.</Typography>
+						<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remain essentially unchanged.</Typography>
 					</View>
 				</View>
 				<View style={{ marginVertical: 20 }}>
-					<Button label={'ACCEPT REQUEST'} onPress={() => { navigate('Applicant') }} backgroundColor={COLORS.primary} borderRadius={10} />
-					<Button label={'REJECT REQUEST'} onPress={() => { navigate('Mission') }} backgroundColor={COLORS.primary} borderRadius={10} />
+					<Button label={'ACCEPT REQUEST'} onPress={() => { navigate('Mission') }} backgroundColor={COLORS.primary} borderRadius={10} />
+					<Button label={'REJECT REQUEST'} onPress={() => { navigate('Applicant') }} backgroundColor={COLORS.primary} borderRadius={10} />
 				</View>
 			</LinearGradient>
 		</View>

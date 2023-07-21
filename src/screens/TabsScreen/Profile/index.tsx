@@ -54,25 +54,12 @@ const Account = (props: any) => {
 		<SafeAreaContainer mode={'dark'} safeArea={false}>
 			<View style={{ margin: 20, }}>
 				<Header
-					titleText='Update Profile'
+					titleText='Profile'
 					titleColor={COLORS.black}
 				/>
 			</View>
 		</SafeAreaContainer>
 	);
-};
-
-const customAlert = (props: any) => {
-	Alert.alert('Logout', 'Do you want to logout?', [
-		{
-			text: 'Cancel',
-			onPress: null,
-		},
-		{
-			text: 'OK',
-			onPress: () => logoutApi({ device_token: '' }),
-		},
-	]);
 };
 
 const styles = StyleSheet.create({

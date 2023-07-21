@@ -14,12 +14,16 @@ import OTPScreen from '../screens/auth/OTPScreen';
 import ResetPassword from '../screens/auth/ResetPassword';
 import Home from '../screens/TabsScreen/Home';
 import Register from '../screens/auth/Register';
+import Privacy from '../screens/TabsScreen/Profile/Privacy';
+import Terms from '../screens/TabsScreen/Profile/Terms';
 
 const Stack = createNativeStackNavigator();
 
 export default MainNavigation = () => {
 	const { splash, is_authorized } = useSelector((state: any) => state.AppReducer);
 	if (splash) return <Splash />;
+	console.log(is_authorized, splash, 'is_authorized');
+
 	return (
 		<NavigationContainer ref={navigationRef}>
 			{/* <AppNavigation /> */}
@@ -35,7 +39,10 @@ const AuthNavigation = () => {
 			<Stack.Screen name='Login' component={Login} options={{ animationTypeForReplace: 'push' }} />
 			<Stack.Screen name='SignUp' component={SignUp} />
 			<Stack.Screen name='Register' component={Register} />
-			{/* <Stack.Screen name='Tabs' component={Home} /> */}
+			<Stack.Screen name='Privacy' component={Privacy} />
+			<Stack.Screen name='Terms' component={Terms} />
+
+
 			{/* <Stack.Screen name='ForgetPassword' component={ForgetPassword} options={{ presentation: 'transparentModal' }} />
 			<Stack.Screen name='OTPScreen' component={OTPScreen} options={{ presentation: 'transparentModal' }} />
 			<Stack.Screen name='ResetPassword' component={ResetPassword} options={{ presentation: 'transparentModal' }} /> */}

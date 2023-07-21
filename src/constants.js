@@ -1,7 +1,6 @@
 import { Dimensions, Platform } from 'react-native';
 
-// export const BASEURL = 'https://test-cmolds.com/groupfriendly-api/public/api/';
-export const BASEURL = 'https://www.groupfriendlyapp.com/groupfriendly-api/public/api/';
+export const BASEURL = 'https://test-cmolds.com/umpireonthego_backend_2023/public/api/';
 export const MAP_KEY = 'AIzaSyAquzgo847shlU-SpPXLZMgShv6EW9pQmw';
 export const SRTIPE_PK = 'pk_test_51KxRBHEcLpIir0EoFjCv1Z3T7EAF2kPfyVXZWr6P1Y1RJi2kaow1tElS37tVxFK6qt1VK9pnmkMjAyrjW7xvKBFE00vwvkxGZD';
 

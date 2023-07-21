@@ -11,11 +11,23 @@ import store from '../../store';
 import { updateAppStates } from '../../store/actions/AppActions';
 import { commonStyles } from '../../style';
 import ImagePicker from 'react-native-image-crop-picker';
+import { registerApi } from '../../store/services/AuthServices';
+import * as Validator from '../../utils/Validator';
+import { getBrand, getSystemVersion, getUniqueId, getVersion } from 'react-native-device-info';
+import { useSelector } from 'react-redux';
+import { selectAppState } from '../../store/selectors/appSelector';
 
 const Register = (props: any) => {
+  const { paramId } = props.route?.params
+  console.log('id : ', paramId);
+
+  const [formattedText, setFormattedText] = useState('');
+  const { fcmToken } = useSelector(selectAppState);
   const [errors, setErrors]: any = useState({});
   const [visible, setVisible] = useState(false);
   const [selectImg, setSelectImg] = useState('');
+  const [selectGender, setSelectGender] = useState(true);
+  const [checkIcon, setCheckIcon] = useState(true);
 
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
@@ -23,9 +35,10 @@ const Register = (props: any) => {
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [password, setPassword] = useState('');
-  const [password2, setPassword2] = useState('');
+  const [confirm_password, setConfirm_password] = useState('');
 
   const [secureEntry, setSecureEntry] = useState(true);
+  const [secureEntry2, setSecureEntry2] = useState(true);
   const FnameInput: any = React.createRef();
   const LnameInput: any = React.createRef();
   const PhoneInput: any = React.createRef();
@@ -73,13 +86,40 @@ const Register = (props: any) => {
         setVisible(false);
       });
   };
+
+  const _onSignUp = () => {
+    let validateData = { fname, lname, email, password, phone, confirm_password, address };
+    let phoneCode = `${formattedText}${phone}`;
+    Validator.validate(validateData).then(async (err) => {
+      setErrors(err);
+      if (err && Object.keys(err).length) return;
+      registerApi({
+        first_name: fname,
+        last_name: lname,
+        email,
+        phone: phoneCode,
+        password,
+        user_role: paramId,
+        gender: selectGender,
+        profile_image: selectImg,
+        address,
+
+        udid: await getUniqueId(),
+        device_token: fcmToken,
+        device_type: Platform.OS,
+        device_brand: await getBrand(),
+        device_os: await getSystemVersion(),
+        app_version: await getVersion(),
+      });
+    });
+  };
   return (
     <SafeAreaContainer>
       <ScrollView style={{ flex: 1, backgroundColor: COLORS.secondary }}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={{ flex: 1 }}>
           <View style={styles.headerView}>
             <Header
-              titleText='Update Profile'
+              titleText='Upload Profile'
               titleColor={COLORS.black}
             />
             <TouchableOpacity
@@ -92,9 +132,9 @@ const Register = (props: any) => {
                   resizeMode='cover'
                 />
               ) : (
-                <Image source={IMAGES.Umpire} style={{
+                <Image source={IMAGES.Vector1} style={{
                   alignSelf: "center", width: 120, height: 120, borderRadius: 10
-                }} resizeMode='cover' />
+                }} resizeMode='contain' />
               )}
             </TouchableOpacity>
           </View>
@@ -171,7 +211,7 @@ const Register = (props: any) => {
               onSubmitEditing={() => PasswordInput.current && PasswordInput.current.focus()}
               leftIconVisibility={false}
               leftIcon={<SignupEmail />}
-              allowSpacing={false}
+              allowSpacing={true}
             />
             <InputText
               cardStyle={styles.cardStyle}
@@ -197,12 +237,12 @@ const Register = (props: any) => {
             <InputText
               cardStyle={styles.cardStyle}
               placeholder={'Confirm Password'}
-              onChangeText={(text: string) => setPassword2(text)}
-              value={password2}
-              error={errors.password2}
+              onChangeText={(text: string) => setConfirm_password(text)}
+              value={confirm_password}
+              error={errors.confirm_password}
               autoCapitalize={'none'}
               returnKeyType={'done'}
-              secureTextEntry={secureEntry}
+              secureTextEntry={secureEntry2}
               inputRef={PasswordInput2}
               onSubmitEditing={() => {
                 Keyboard.dismiss();
@@ -212,8 +252,8 @@ const Register = (props: any) => {
               rightIcon={
                 <TouchableOpacity
                   style={{ justifyContent: 'center', marginHorizontal: 8 }}
-                  onPress={() => setSecureEntry(!secureEntry)}>
-                  <Icon name={secureEntry ? 'eye-slash' : 'eye'} size={15} color={COLORS.darkGray} />
+                  onPress={() => setSecureEntry2(!secureEntry2)}>
+                  <Icon name={secureEntry2 ? 'eye-slash' : 'eye'} size={15} color={COLORS.darkGray} />
                 </TouchableOpacity>
               }
             />
@@ -222,25 +262,47 @@ const Register = (props: any) => {
             colors={['#495BC1', '#BF2011']}
             style={styles.bottomBar}>
             {
-              USER.map((i: any) => (
-                <TouchableOpacity style={{ padding: 10, justifyContent: "center" }}>
-                  <View style={styles.circleBar}>
-                    <Image
-                      source={i.image}
-                      style={{ width: 30, height: 30, }}
-                      resizeMode='cover'
-                    />
+              USER.map((i: any, ind: any) => {
+                return (
+                  <View
+                    style={{
+                      padding: 10,
+                      justifyContent: "center",
+
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => setSelectGender(i.id)}
+                      style={[styles.circleBar, {
+                        backgroundColor: selectGender == i.id ? 'gray' : 'white'
+                      }]}>
+                      <Image
+                        source={i.image}
+                        style={{ width: 30, height: 30, }}
+                        resizeMode='cover'
+                      />
+                    </TouchableOpacity>
+                    <Typography align='center' color='#fff'>{i.user}</Typography>
                   </View>
-                  <Typography align='center' color='#fff'>{i.user}</Typography>
-                </TouchableOpacity>
-              ))
+                )
+              })
             }
           </LinearGradient>
+          <View style={[styles.bottomView, { justifyContent: "flex-start", marginHorizontal: 30 }]}>
+            <TouchableOpacity onPress={() => setCheckIcon(!checkIcon)} style={styles.checkBox}>
+              <Icon name={checkIcon ? 'check' : ''} size={15} color={COLORS.darkGray} />
+            </TouchableOpacity>
+            <Typography color={COLORS.white} style={{ marginLeft: 10 }}>
+              I agree to the&nbsp;
+            </Typography>
+            <TouchableOpacity onPress={() => navigate('Terms')}>
+              <Typography color={'#FFA24A'} align='center'>
+                Terms and Conditions
+              </Typography>
+            </TouchableOpacity>
+          </View>
           <Button label={'REGISTER'}
-            onPress={() =>
-              store.dispatch(updateAppStates({ is_authorized: true }))
-            }
-
+            // onPress={() => store.dispatch(updateAppStates({ is_authorized: true }))}
+            onPress={() => _onSignUp()}
             backgroundColor={COLORS.primary} borderRadius={10} />
         </KeyboardAvoidingView>
         <Modal animationType='slide' transparent={true} visible={visible}>
@@ -294,15 +356,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: 'row'
   },
-  profileImg: {
-    backgroundColor: '#fff',
-    marginVertical: 20,
-    alignSelf: "center",
-    width: 100,
-    height: 100,
-    borderWidth: 1,
-    borderRadius: 10,
-  },
   cardStyle: {
     backgroundColor: '#fff',
     borderRadius: 10,
@@ -322,18 +375,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingVertical: 20
   },
-  // cardStyle: {
-  // 	backgroundColor: '#fff',
-  // 	borderRadius: 10,
-  // 	paddingHorizontal: 10,
-  // 	height: 55,
-  // 	alignItems: "center",
-  // },
-  gameModalView: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-  },
   // Modal Styling
   centerView: {
     flex: 1,
@@ -345,8 +386,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     width: screenWidth(100),
     paddingHorizontal: 30,
-    // paddingVertical: 100,
-    // marginHorizontal: 20,
   },
   profileStyle: {
     justifyContent: 'center',
@@ -358,9 +397,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 10,
     backgroundColor: COLORS.white,
-    // paddingVertical: 0,
     paddingHorizontal: 10,
-    // marginHorizontal: 10,
   },
   lineBar: {
     width: '100%',
@@ -370,6 +407,21 @@ const styles = StyleSheet.create({
     color: '#007bff',
     marginVertical: 10,
     fontSize: 16,
+  },
+  bottomView: {
+    flexDirection: 'row',
+    marginVertical: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkBox: {
+    width: 20,
+    height: 20,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

@@ -29,6 +29,7 @@ export const InputText = props => {
     multiline = false,
     editable = true,
     allowSpacing = true,
+    validationColor = COLORS.white
   } = props;
 
   const [active, setActive] = useState(false);
@@ -95,7 +96,7 @@ export const InputText = props => {
       </View>
       {error != null && error != '' && (
         <Typography
-          color={COLORS.primary}
+          color={validationColor}
           size={FONTSIZE.XXS}
           textType="light"
           align="right">

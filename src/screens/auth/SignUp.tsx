@@ -4,17 +4,25 @@ import { COLORS, IMAGES } from '../../constants';
 import SafeAreaContainer from '../../containers/SafeAreaContainer';
 import { Typography, Header } from '../../components/atoms';
 import LinearGradient from 'react-native-linear-gradient';
-import { navigate } from '../../navigation/RootNavigation';
-
+import { navigate, onBack } from '../../navigation/RootNavigation';
+import Icon from "react-native-vector-icons/AntDesign";
 const SignUp = (props: any) => {
 	return (
 		<SafeAreaContainer>
 			<ScrollView style={{ flex: 1, backgroundColor: COLORS.secondary }}>
 				<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={{ flex: 1 }}>
 					<View style={styles.headerView}>
-						<Header
-							titleColor={COLORS.black}
-						/>
+						<TouchableOpacity onPress={() => navigate('Login')}
+							style={{
+								width: 25,
+								height: 25,
+								backgroundColor: "#E0E0E0",
+								borderRadius: 5,
+								justifyContent: "center",
+								alignItems: "center"
+							}}>
+							<Icon name={'left'} size={15} color={'#000'} />
+						</TouchableOpacity>
 						<Image
 							source={IMAGES.Umpire}
 							style={{ width: 120, height: 120, alignSelf: "center" }}
@@ -24,40 +32,45 @@ const SignUp = (props: any) => {
 						<Typography textType='semiBold' style={{ alignSelf: 'center', }} size={22}>Register As</Typography>
 					</View>
 					{
-						REGISTER_BOX.map((i) => (
-							<TouchableOpacity
-								onPress={() => navigate('Register')}
-								activeOpacity={0.9}
-								style={styles.registerView}>
-								<Image
-									source={i.image}
-									style={{
-										width: '100%',
-										borderTopLeftRadius: 20,
-										borderTopRightRadius: 20
-									}}
-									resizeMode='cover'
-								/>
-								{
-									i.type &&
-									<View style={styles.circleBar}>
-										<Image
-											source={i.circleImg}
-											style={{ width: 25, height: 25 }}
-											resizeMode='cover'
-										/>
-									</View>
-								}
+						REGISTER_BOX.map((i, ind) => {
+							console.log('i', i, ind);
+							return (
+								<TouchableOpacity
+									onPress={() => navigate('Register', {
+										paramId: i.title
+									})}
+									activeOpacity={0.9}
+									style={styles.registerView}>
+									<Image
+										source={i.image}
+										style={{
+											width: '100%',
+											borderTopLeftRadius: 20,
+											borderTopRightRadius: 20
+										}}
+										resizeMode='cover'
+									/>
+									{
+										i.type &&
+										<View style={styles.circleBar}>
+											<Image
+												source={i.circleImg}
+												style={{ width: 25, height: 25 }}
+												resizeMode='cover'
+											/>
+										</View>
+									}
 
-								<LinearGradient
-									colors={['#495BC1', '#BF2011']}
-									style={styles.bottomBar}
-								>
-									<Typography size={16} color='#fff' textType='semiBold'>
-										{i.title}</Typography>
-								</LinearGradient>
-							</TouchableOpacity>
-						))
+									<LinearGradient
+										colors={['#495BC1', '#BF2011']}
+										style={styles.bottomBar}
+									>
+										<Typography size={16} color='#fff' textType='semiBold'>
+											{i.title}</Typography>
+									</LinearGradient>
+								</TouchableOpacity>
+							)
+						})
 					}
 				</KeyboardAvoidingView>
 			</ScrollView>
@@ -68,21 +81,24 @@ const SignUp = (props: any) => {
 const REGISTER_BOX = [
 	{
 		id: 1,
-		title: "UMPIRE / REFEREE",
+		// title: "UMPIRE / REFEREE",
+		title: "umpire",
 		image: IMAGES.image1,
 		circleImg: IMAGES.Umpire,
 		type: true
 	},
 	{
 		id: 2,
-		title: "GAME ASSIGNER",
+		// title: "GAME ASSIGNER",
+		title: "game_assigner",
 		image: IMAGES.image2,
 		circleImg: IMAGES.Umpire,
 		type: true
 	},
 	{
 		id: 3,
-		title: "BOTH",
+		// title: "BOTH",
+		title: "both",
 		image: IMAGES.image1,
 		type: false
 	},

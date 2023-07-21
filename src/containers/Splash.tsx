@@ -7,40 +7,42 @@ import { Button, Typography } from '../components/atoms';
 import { navigate } from '../navigation/RootNavigation';
 import store from '../store';
 import { updateAppStates } from '../store/actions/AppActions';
+import { getItem } from '../utils/localStorage';
+import { updateUserStates } from '../store/actions/UserActions';
 
 const Splash = (props: any) => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    setTimeout(() => {
+      // props.navigation.navigate('Login')
+    }, 1000);
+  }, []);
+  useEffect(() => {
+    setTimeout(async () => {
+      const token = await getItem('token');
+      const user = await getItem('user');
+      if (user && token) {
+        console.log('user', user);
+        console.log('token', token);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     props.navigation.navigate('Login')
-  //   }, 1000);
-  // }, []);
-  // useEffect(() => {
-  //   setTimeout(async () => {
-  //     const token = await getItem('token');
-  //     const user = await getItem('user');
-  //     if (user && token) {
-  //       console.log('user', user);
-  //       console.log('token', token);
+        dispatch(updateUserStates({
+          token, user
+        }))
 
-  //       dispatch(updateUserStates({
-  //         token, user
-  //       }))
+        dispatch(updateAppStates({
+          splash: false,
+          is_authorized: true,
+        }));
+      } else {
+        dispatch(updateAppStates({
+          splash: false,
+          is_authorized: false,
+        }));
+      }
+    }, 3000);
 
-  //       dispatch(updateAppStates({
-  //         splash: false,
-  //         is_authorized: true,
-  //       }));
-  //     } else {
-  //       dispatch(updateAppStates({
-  //         splash: false,
-  //         is_authorized: false,
-  //       }));
-  //     }
-  //   }, 3000);
-
-  //   // requestUserPermission()
-  // }, []);
+    // requestUserPermission()
+  }, []);
 
   // const requestUserPermission = async () => {
   //   const authStatus = await messaging().requestPermission();
@@ -73,30 +75,25 @@ const Splash = (props: any) => {
           resizeMode='cover'
         >
           <View style={styles.container}>
-            <Typography size={40} color='#fff' style={{ marginTop: 50, }}>
+            <Typography size={40} color='#fff' style={{ marginTop: 100, }}>
               WELCOME BACK!
             </Typography>
-            <View style={{ width: 300, height: '40%' }}>
+            <View style={{ width: 300, height: 250 }}>
               <Image
                 source={IMAGES.Umpire}
                 style={{ flex: 1 }}
                 resizeMode='contain'
               />
             </View>
-            <Typography size={25} color={COLORS.darkGray} style={{ top: -10 }}>
+            <Typography size={25} color={COLORS.darkGray} style={{ top: 0 }}>
               On The Go
             </Typography>
-            <View style={{ marginVertical: 50, width: "100%" }}>
+
+            {/* <View style={{ width: "100%" }}>
               <Button label={'Get Started'} onPress={() => {
                 store.dispatch(updateAppStates({ splash: false }))
               }} backgroundColor={COLORS.primary} borderRadius={10} />
-
-            </View>
-            <TouchableOpacity>
-              {/* <Typography size={16} color={COLORS.white} style={{}}>
-                Already have an account? LOG IN
-              </Typography> */}
-            </TouchableOpacity>
+            </View> */}
           </View>
         </ImageBackground>
       </View>

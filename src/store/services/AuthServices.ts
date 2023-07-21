@@ -9,63 +9,50 @@ import store from '..';
 export const registerApi = async (data: any) => {
 	console.log(data);
 	store.dispatch(enableLoader());
-	return post(`signup`, JSON.stringify(data))
+	return post(`register`, JSON.stringify(data))
 		.then((res) => {
+			console.log('res',res);
 			store.dispatch(disableLoader());
-			console.log(res);
+			
 			if ('response' in res) {
-				store.dispatch(
-					updateUserStates({
-						token: res.response.data.token,
-						user: res.response.data,
+				store.dispatch(updateUserStates({
+						token: res.response.data.user.token,
+						user: res.response.data.user,
 					})
 				);
-				setItem('user', res.response.data);
-				console.log('user', res.response.data);
-				setItem('token', res.response.data.token);
-				store.dispatch(
-					updateAppStates({
-						is_authorized: true,
-					})
+				setItem('user', res.response.data.user);
+				setItem('token', res.response.data.user.token);
+				store.dispatch(updateAppStates({is_authorized: true})
 				);
 			} else {
+				console.log('to',res.response.data.user.token);
+				
 				errorHandler(res);
 			}
-
-			return res;
 		})
 		.catch((error) => {
 			store.dispatch(disableLoader());
 		});
 };
 export const loginApi = async (data: any) => {
-	console.log(data);
-
 	store.dispatch(enableLoader());
-	return post(`signin`, JSON.stringify(data))
+	return post(`login`, JSON.stringify(data))
 		.then((res) => {
 			store.dispatch(disableLoader());
 			console.log(res);
 			if ('response' in res) {
-				store.dispatch(
-					updateUserStates({
-						token: res.response.data.token,
-						user: res.response.data,
+				store.dispatch(updateUserStates({
+						token: res.response.data.user.token,
+						user: res.response.data.user,
 					})
 				);
-				setItem('user', res.response.data);
-				setItem('token', res.response.data.token);
-				console.log('log');
-				store.dispatch(
-					updateAppStates({
-						is_authorized: true,
-					})
+				setItem('user', res.response.data.user);
+				setItem('token', res.response.data.user.token);
+				store.dispatch(updateAppStates({is_authorized: true})
 				);
-				//   navigate('Tabs')
 			} else {
 				errorHandler(res);
 			}
-			return res;
 		})
 		.catch((error) => {
 			store.dispatch(disableLoader());
@@ -210,14 +197,12 @@ export const updateUserApi = async (data: any) => {
 		});
 };
 export const changePasswordApi = async (data: any) => {
-	console.log(data);
 	store.dispatch(enableLoader());
-	return post(`change/password`, JSON.stringify(data))
+	return post(`user/changeUserpassword`, JSON.stringify(data))
 		.then((res) => {
 			store.dispatch(disableLoader());
 			if ('response' in res) {
 				console.log('res', res);
-
 				store.dispatch(showToast(res.response?.messages[0]));
 				onBack();
 			} else {
@@ -230,70 +215,51 @@ export const changePasswordApi = async (data: any) => {
 		});
 };
 export const policyApi = async (data: any) => {
-	console.log(data);
 	store.dispatch(enableLoader());
-	return get(`contents`)
+	return get(`content/privacy-policy`)
 		.then((res) => {
+			console.log('res',res);
 			store.dispatch(enableLoader());
-			console.log(res);
 			if ('response' in res) {
 				store.dispatch(disableLoader());
-				return res.response.data[0].description;
+				return res.response.data.content.description;
 			} else {
 				errorHandler(res);
 				store.dispatch(disableLoader());
 			}
-			return res;
 		})
-
-		.catch((error) => {
-			store.dispatch(disableLoader());
-		});
 };
-export const aboutApi = async (data: any) => {
-	console.log(data);
+export const termsApi = async (data: any) => {
 	store.dispatch(enableLoader());
-	return get(`contents`)
+	return get(`content/terms-and-conditions`)
 		.then((res) => {
 			store.dispatch(enableLoader());
-			console.log(res);
 			if ('response' in res) {
 				store.dispatch(disableLoader());
-				return res.response.data[1].description;
+				return res.response.data.content.description;
 			} else {
 				errorHandler(res);
 				store.dispatch(disableLoader());
 			}
-			return res;
 		})
-
-		.catch((error) => {
-			store.dispatch(disableLoader());
-		});
 };
 export const logoutApi = async (data: any) => {
 	store.dispatch(enableLoader());
-	return post(`logout`, JSON.stringify(data))
+	return post(`user/logout`, JSON.stringify(data))
 		.then((res) => {
-			console.log('data', data);
-
 			store.dispatch(disableLoader());
 			if ('response' in res) {
 				console.log('res', res);
 				removeItem('user');
 				removeItem('token');
-				store.dispatch(
-					updateUserStates({
+				store.dispatch(updateUserStates({
 						token: null,
 						user: {},
 					})
 				);
-
-				store.dispatch(
-					updateAppStates({
-						is_authorized: false,
-					})
+				store.dispatch(updateAppStates({is_authorized: false})
 				);
+				store.showToast(res.response.messages[0])
 			} else {
 				errorHandler(res);
 			}

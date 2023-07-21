@@ -7,9 +7,12 @@ import * as Validator from '../../utils/Validator';
 import { SignupEmail, SignupLock } from '../../components/icons';
 import { navigate, reset } from '../../navigation/RootNavigation';
 import { useDispatch, useSelector } from 'react-redux';
-import Logo from '../../components/icons/Logo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { selectAppState } from '../../store/selectors/appSelector';
+import { updateAppStates } from '../../store/actions/AppActions';
+import store from '../../store';
+import { loginApi } from '../../store/services/AuthServices';
+import { getBrand, getSystemVersion, getUniqueId, getVersion } from 'react-native-device-info';
 
 const Login = (props: any) => {
 	const dispatch = useDispatch();
@@ -20,6 +23,7 @@ const Login = (props: any) => {
 	const [password, setPassword] = useState('');
 
 	const [secureEntry, setSecureEntry] = useState(true);
+	const [checkIcon, setCheckIcon] = useState(true);
 	const EmailInput: any = React.createRef();
 	const PasswordInput: any = React.createRef();
 
@@ -28,17 +32,16 @@ const Login = (props: any) => {
 		Validator.validate(validateData).then(async (err) => {
 			setErrors(err);
 			if (err && Object.keys(err).length) return;
-			// loginApi({
-			// 	email,
-			// 	password,
-			// 	udid: await getUniqueId(),
-			// 	device_token: fcmToken,
-			// 	device_type: Platform.OS,
-			// 	device_brand: await getBrand(),
-			// 	device_os: await getSystemVersion(),
-			// 	app_version: await getVersion(),
-			// });
-			navigate('Tabs')
+			loginApi({
+				email,
+				password,
+				udid: await getUniqueId(),
+				device_token: fcmToken,
+				device_type: Platform.OS,
+				device_brand: await getBrand(),
+				device_os: await getSystemVersion(),
+				app_version: await getVersion(),
+			});
 		});
 	};
 	return (
@@ -50,8 +53,9 @@ const Login = (props: any) => {
 					contentContainerStyle={{ paddingHorizontal: 20, paddingTop: Platform.OS === 'ios' ? 30 : 60 }}
 					style={{ flex: 1 }}>
 					<Header
-						titleText="Sign In"
+						titleText="   Sign In"
 						titleColor={COLORS.black}
+						leftIcon={false}
 					/>
 
 					{
@@ -115,7 +119,19 @@ const Login = (props: any) => {
 								</TouchableOpacity>
 							}
 						/>
-						<Typography align='center' color={COLORS.halfWhite}>Or log in with email</Typography>
+						<View style={[styles.bottomView, { justifyContent: "flex-start" }]}>
+							<TouchableOpacity onPress={() => setCheckIcon(!checkIcon)} style={styles.checkBox}>
+								<Icon name={checkIcon ? 'check' : ''} size={15} color={COLORS.darkGray} />
+							</TouchableOpacity>
+							<Typography color={COLORS.black} style={{ marginLeft: 10 }}>
+								I have read the&nbsp;
+							</Typography>
+							<TouchableOpacity onPress={() => navigate('Privacy')}>
+								<Typography color={COLORS.primary} align='center'>
+									Privace Policy
+								</Typography>
+							</TouchableOpacity>
+						</View>
 					</View>
 					{/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 						<TouchableOpacity
@@ -128,19 +144,20 @@ const Login = (props: any) => {
 							</Typography>
 						</TouchableOpacity>
 					</View> */}
-					<View style={{ marginVertical: 20 }}>
+					<View style={{ marginVertical: 60 }}>
 						<Button label={'Sign In'} onPress={_onSignin} backgroundColor={COLORS.primary} borderRadius={10} />
-					</View>
-					<View style={styles.bottomView}>
-						<Typography color={COLORS.black} align='center'>
-							Don't have an account?&nbsp;
-						</Typography>
-						<TouchableOpacity onPress={() => reset('SignUp')}>
-							<Typography color={COLORS.primary} align='center'>
-								Sign Up
+						<View style={[styles.bottomView, { marginVertical: 0 }]}>
+							<Typography color={COLORS.black} align='center'>
+								Don't have an account?&nbsp;
 							</Typography>
-						</TouchableOpacity>
+							<TouchableOpacity onPress={() => reset('SignUp')}>
+								<Typography color={COLORS.primary} align='center'>
+									Sign Up
+								</Typography>
+							</TouchableOpacity>
+						</View>
 					</View>
+
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</SafeAreaContainer>
@@ -168,6 +185,14 @@ const styles = StyleSheet.create({
 	},
 	inputContainer: {
 		marginTop: 40,
+	},
+	checkBox: {
+		width: 20,
+		height: 20,
+		borderRadius: 5,
+		borderWidth: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	socialIcon: {
 		margin: 5,

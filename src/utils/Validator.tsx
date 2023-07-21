@@ -24,6 +24,8 @@ export const validate = async (data: any, type: string = '') => {
     default:
       schema = {
         name: yup.string().required().min(2).max(50),
+        fname: yup.string().required().min(2).max(50),
+        lname: yup.string().required().min(2).max(50),
         email: yup.string().email().required().max(100),
         address: yup.string().required().max(255),
         query: yup.string().required().max(255),

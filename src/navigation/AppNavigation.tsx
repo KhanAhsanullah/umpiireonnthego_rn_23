@@ -10,23 +10,9 @@ import Home from '../screens/TabsScreen/Home';
 import BottomTabs from './BottomTabs';
 import Places from '../screens/TabsScreen/Places';
 import Notifications from '../screens/TabsScreen/Notifications';
-import FilterStore from '../screens/DetailsScreen/FilterStore';
-import FilterStoreDetail from '../screens/DetailsScreen/FilterStoreDetail';
 import Account from '../screens/TabsScreen/Profile';
 import Privacy from '../screens/TabsScreen/Profile/Privacy';
-import Contact from '../screens/TabsScreen/Profile/Contact';
-import SearchScreen from '../screens/TabsScreen/SearchScreen';
-import EditProfile from '../screens/TabsScreen/Profile/EditProfile';
-import StoreDetails from '../screens/DetailsScreen/StoreDetails';
-import FilterScreen from '../screens/DetailsScreen/FilterScreen';
-import SearchStore from '../screens/DetailsScreen/SearchStore';
-import PreviewScreen from '../screens/DetailsScreen/PreviewScreen';
-import ChangePassword from '../screens/TabsScreen/Profile/ChangePassword';
-import AboutUs from '../screens/TabsScreen/Profile/AboutUs';
-
 // import messaging from '@react-native-firebase/messaging';
-import { showToast } from '../store/actions/AppActions';
-import { navigate } from './RootNavigation';
 import AssignGame from '../screens/TabsScreen/AssignGame';
 import CardDetails from '../screens/TabsScreen/CardDetails';
 import UmpireDetails from '../screens/TabsScreen/UmpireDetails';
@@ -35,6 +21,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Applicant from '../screens/TabsScreen/Applicant';
 import Mission from '../screens/TabsScreen/Mission';
 import Terms from '../screens/TabsScreen/Profile/Terms';
+import ChangePassword from '../screens/TabsScreen/Profile/ChangePassword';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -43,6 +30,7 @@ const Tab = createBottomTabNavigator();
 const AppNavigation = () => {
 	const { requirement } = useSelector(selectUserState);
 	const initialRoute = requirement ? 'Login' : 'Tabs';
+	// console.log('initial', initialRoute);
 
 	const dispatch = useDispatch();
 
@@ -89,6 +77,7 @@ const AppNavigation = () => {
 			<Stack.Screen name='DrawerScreen' component={DrawerScreen} />
 			<Stack.Screen name='Privacy' component={Privacy} />
 			<Stack.Screen name='Terms' component={Terms} />
+			<Stack.Screen name='ChangePassword' component={ChangePassword} />
 		</Stack.Navigator>
 	);
 };

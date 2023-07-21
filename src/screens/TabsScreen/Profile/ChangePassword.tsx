@@ -9,7 +9,6 @@ import { changePasswordApi } from '../../../store/services/AuthServices';
 import { commonStyles } from '../../../style';
 import { onBack } from '../../../navigation/RootNavigation';
 
-
 const ChangePassword = (props: any) => {
     const [errors, setErrors] = useState({});
 
@@ -41,15 +40,16 @@ const ChangePassword = (props: any) => {
                 password_confirmation: confirmPass,
             });
         });
+        onBack()
     };
 
     return (
         <SafeAreaContainer mode={'dark'} safeArea={false}>
-            <View style={commonStyles.headerView}>
-                <Header titleText="Change Password" />
+            <View style={[commonStyles.headerView, { marginTop: 50 }]}>
+                <Header titleText="Change Password" titleColor={COLORS.black} />
             </View>
-            <View style={[commonStyles.footerContainer, {}]}>
-                <ScrollView style={styles.formPassword}>
+            <View style={{ margin: 10 }}>
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.mainContainer}>
                         <InputText
                             style={{ margin: 10 }}
@@ -127,9 +127,6 @@ const ChangePassword = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-    formPassword: {
-        marginVertical: 20,
-    },
     mainContainer: {
         marginTop: 50,
         borderWidth: 1,
