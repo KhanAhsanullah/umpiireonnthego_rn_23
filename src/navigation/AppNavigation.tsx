@@ -8,7 +8,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import Home from '../screens/TabsScreen/Home';
 import BottomTabs from './BottomTabs';
-import Places from '../screens/TabsScreen/Places';
+// import Places from '../screens/TabsScreen/Places';
 import Notifications from '../screens/TabsScreen/Notifications';
 import Account from '../screens/TabsScreen/Profile';
 import Privacy from '../screens/TabsScreen/Profile/Privacy';
@@ -89,7 +89,7 @@ const BottomTabNavigation = (props: any) => {
 			tabBar={(e) => <BottomTabs {...e} {...props} />}
 			screenOptions={{ headerShown: false }}>
 			<Tab.Screen name='Home' component={Home} />
-			<Tab.Screen name='Places' component={Places} />
+			{/* <Tab.Screen name='Places' component={Places} /> */}
 			<Tab.Screen name='Notifications' component={Notifications} />
 			<Tab.Screen name='Account' component={Account} />
 		</Tab.Navigator>
