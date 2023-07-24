@@ -29,7 +29,7 @@ export const InputText = props => {
     multiline = false,
     editable = true,
     allowSpacing = true,
-    validationColor = COLORS.white
+    validationColor = 'red'
   } = props;
 
   const [active, setActive] = useState(false);

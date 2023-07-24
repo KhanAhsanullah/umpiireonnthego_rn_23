@@ -25,6 +25,9 @@ import { logoutApi } from '../store/services/AuthServices';
 
 const DrawerScreen = (props: any) => {
     const userState = useSelector(selectUserState);
+    const imageFromState = userState?.user?.profile_image;
+    console.log('imageFromState', imageFromState);
+
     const { full_name: name, email, avatarImg } = userState.user;
     return (
         <SafeAreaContainer >
@@ -35,12 +38,20 @@ const DrawerScreen = (props: any) => {
                     <IconIonic name='menu' size={26} color={COLORS.primary} />
                 </TouchableOpacity>
                 <View>
-                    <Image
+                    {/* <Image
                         source={avatarImg || IMAGES.Umpire}
                         style={{ width: 150, height: 150, }}
                         resizeMode="contain"
-                    />
-                    <Typography color={COLORS.white} style={{ marginLeft: 20 }}>On The Go</Typography>
+                    /> */}
+                    {imageFromState == null ? (
+                        <Image source={IMAGES.Umpire} style={{
+                            width: 150, height: 150, borderRadius: 150 / 2
+                        }} resizeMode='cover' />
+
+                    ) : (
+                        <Image source={{ uri: imageFromState }} style={{ width: 150, height: 150, borderRadius: 150 / 2 }} resizeMode='cover' />
+                    )}
+                    <Typography color={COLORS.white} style={{ margin: 20 }}>On The Go</Typography>
                 </View>
                 {
                     DrawerContent.map((i) => (

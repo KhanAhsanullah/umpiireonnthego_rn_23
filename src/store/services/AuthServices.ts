@@ -7,32 +7,42 @@ import { removeItem, setItem } from '../../utils/localStorage';
 import store from '..';
 
 export const registerApi = async (data: any) => {
-	console.log(data);
+	console.log('data',data);
+	
 	store.dispatch(enableLoader());
-	return post(`register`, JSON.stringify(data))
-		.then((res) => {
-			console.log('res',res);
-			store.dispatch(disableLoader());
-			
-			if ('response' in res) {
-				store.dispatch(updateUserStates({
-						token: res.response.data.user.token,
-						user: res.response.data.user,
-					})
-				);
-				setItem('user', res.response.data.user);
-				setItem('token', res.response.data.user.token);
-				store.dispatch(updateAppStates({is_authorized: true})
-				);
-			} else {
-				console.log('to',res.response.data.user.token);
-				
-				errorHandler(res);
-			}
-		})
-		.catch((error) => {
-			store.dispatch(disableLoader());
-		});
+	const formData = new FormData();
+	formData.append('first_name', data.first_name);
+	formData.append('last_name', data.last_name);
+	formData.append('email', data.email)
+	formData.append('phone', data.phone);
+	formData.append('address', data.address);
+	formData.append('gender', data.gender);
+	formData.append('password', data.password);
+	formData.append('user_role',data.user_role );
+	formData.append('profile_image', data.profile_image);
+	return post(`register`, formData, {}, true)
+	.then((res) => {
+		store.dispatch(disableLoader());
+		console.log( "ahsna .. " ,res);
+		if ('response' in res) {
+			store.dispatch(updateUserStates({
+					token: res.response.data.user.token,
+					user: res.response.data.user,
+				})
+			);
+			setItem('user', res.response.data.user);
+			setItem('token', res.response.data.user.token);
+			store.dispatch(updateAppStates({is_authorized: true})
+			);
+		} else {
+			errorHandler(res);
+		}
+	})
+	.catch((error) => {
+		store.dispatch(disableLoader());
+		store.dispatch(showToast(error.message));
+		store.dispatch(disableLoader());
+	});
 };
 export const loginApi = async (data: any) => {
 	store.dispatch(enableLoader());

@@ -16,16 +16,15 @@ import * as Validator from '../../utils/Validator';
 import { getBrand, getSystemVersion, getUniqueId, getVersion } from 'react-native-device-info';
 import { useSelector } from 'react-redux';
 import { selectAppState } from '../../store/selectors/appSelector';
+import { selectUserState } from '../../store/selectors/userSelector';
 
 const Register = (props: any) => {
   const { paramId } = props.route?.params
-  console.log('id : ', paramId);
-
   const [formattedText, setFormattedText] = useState('');
   const { fcmToken } = useSelector(selectAppState);
   const [errors, setErrors]: any = useState({});
   const [visible, setVisible] = useState(false);
-  const [selectImg, setSelectImg] = useState('');
+  const [selectImg, setSelectImg] = useState({});
   const [selectGender, setSelectGender] = useState(true);
   const [checkIcon, setCheckIcon] = useState(true);
 
@@ -46,6 +45,9 @@ const Register = (props: any) => {
   const EmailInput: any = React.createRef();
   const PasswordInput: any = React.createRef();
   const PasswordInput2: any = React.createRef();
+  const userState = useSelector(selectUserState);
+  const imageFromState = userState?.user?.profile_image;
+  const user = userState.user;
 
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
@@ -86,10 +88,12 @@ const Register = (props: any) => {
         setVisible(false);
       });
   };
+  console.log('select', selectImg);
 
   const _onSignUp = () => {
     let validateData = { fname, lname, email, password, phone, confirm_password, address };
     let phoneCode = `${formattedText}${phone}`;
+
     Validator.validate(validateData).then(async (err) => {
       setErrors(err);
       if (err && Object.keys(err).length) return;
@@ -125,7 +129,7 @@ const Register = (props: any) => {
             <TouchableOpacity
               activeOpacity={0.8} style={[commonStyles.cardWithShadow, styles.imgView]}
               onPress={() => setVisible(true)}>
-              {selectImg ? (
+              {/* {selectImg ? (
                 <Image
                   source={selectImg || IMAGES.VectorImg}
                   style={{ alignSelf: "center", width: 120, height: 120, borderRadius: 10 }}
@@ -135,6 +139,17 @@ const Register = (props: any) => {
                 <Image source={IMAGES.Vector1} style={{
                   alignSelf: "center", width: 120, height: 120, borderRadius: 10
                 }} resizeMode='contain' />
+              )} */}
+              {imageFromState == null || selectImg ? (
+                <Image
+                  source={selectImg || IMAGES.Vector1}
+                  style={{ alignSelf: "center", width: 120, height: 120, borderRadius: 10 }}
+                  resizeMode='contain'
+                />
+              ) : (
+                <Image source={{ uri: imageFromState }}
+                  style={{ width: 110, height: 110, borderRadius: 55 }}
+                  resizeMode='cover' />
               )}
             </TouchableOpacity>
           </View>
