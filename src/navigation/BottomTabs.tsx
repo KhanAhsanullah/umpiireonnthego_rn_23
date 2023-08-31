@@ -93,7 +93,7 @@ const BOTTOMTABS = [
 	{
 		key: 3,
 		title: 'PROFILE',
-		navigateTo: 'Account',
+		navigateTo: 'DrawerScreen',
 		image: <IconFont name="user-o" color={COLORS.lightBlack} size={20} />,
 		imageActive: <IconFont name="user" color={COLORS.primary} size={20} />,
 	},

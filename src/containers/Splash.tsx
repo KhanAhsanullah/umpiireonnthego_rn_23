@@ -9,6 +9,7 @@ import store from '../store';
 import { updateAppStates } from '../store/actions/AppActions';
 import { getItem } from '../utils/localStorage';
 import { updateUserStates } from '../store/actions/UserActions';
+import messaging from '@react-native-firebase/messaging';
 
 const Splash = (props: any) => {
   const dispatch = useDispatch()
@@ -41,30 +42,30 @@ const Splash = (props: any) => {
       }
     }, 3000);
 
-    // requestUserPermission()
+    requestUserPermission()
   }, []);
 
-  // const requestUserPermission = async () => {
-  //   const authStatus = await messaging().requestPermission();
-  //   const enabled =
-  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-  //   if (enabled) {
-  //     getFcmToken();
-  //     console.log('Authorization status:', authStatus);
-  //   }
-  // };
+    if (enabled) {
+      getFcmToken();
+      console.log('Authorization status:', authStatus);
+    }
+  };
 
-  // const getFcmToken = async () => {
-  //   const fcmToken = await messaging().getToken();
-  //   if (fcmToken) {
-  //     console.log('Your Firebase Token is:', fcmToken);
-  //     dispatch(updateAppStates({ fcmToken }));
-  //   } else {
-  //     console.log('Failed', 'No token received');
-  //   }
-  // };
+  const getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      console.log('Your Firebase Token is:', fcmToken);
+      dispatch(updateAppStates({ fcmToken }));
+    } else {
+      console.log('Failed', 'No token received');
+    }
+  };
 
   return (
     <SafeAreaContainer safeArea={false}>

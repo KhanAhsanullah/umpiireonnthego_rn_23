@@ -103,8 +103,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, ScrollView, TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { Typography } from '../../../components/atoms';
-import { COLORS, FONTS, FONTSIZE } from '../../../constants';
+import { Typography } from '../../components/atoms';
+import { COLORS, FONTS, FONTSIZE } from '../../constants';
 
 const VerifyAccount = (props: any) => {
   const dispatch = useDispatch();
@@ -127,7 +127,7 @@ const VerifyAccount = (props: any) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.sectionCode}>
-        {Array(4)
+        {Array(5)
           .fill('')
           .map((_, i) => (
             <View style={[styles.sectionField]}>

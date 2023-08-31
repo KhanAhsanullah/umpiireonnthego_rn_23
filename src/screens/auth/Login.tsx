@@ -11,8 +11,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { selectAppState } from '../../store/selectors/appSelector';
 import { updateAppStates } from '../../store/actions/AppActions';
 import store from '../../store';
-import { loginApi } from '../../store/services/AuthServices';
+import { loginApi, socialLoginApi } from '../../store/services/AuthServices';
 import { getBrand, getSystemVersion, getUniqueId, getVersion } from 'react-native-device-info';
+import { googleLogin } from '../../utils/SocialLogin';
 
 const Login = (props: any) => {
 	const dispatch = useDispatch();
@@ -29,19 +30,22 @@ const Login = (props: any) => {
 
 	const _onSignin = () => {
 		let validateData = { email, password };
+		console.log('fcmToken', fcmToken);
+
 		Validator.validate(validateData).then(async (err) => {
 			setErrors(err);
 			if (err && Object.keys(err).length) return;
 			loginApi({
 				email,
 				password,
-				udid: await getUniqueId(),
+				// udid: await getUniqueId(),
 				device_token: fcmToken,
-				device_type: Platform.OS,
-				device_brand: await getBrand(),
-				device_os: await getSystemVersion(),
-				app_version: await getVersion(),
+				// device_type: Platform.OS,
+				// device_brand: await getBrand(),
+				// device_os: await getSystemVersion(),
+				// app_version: await getVersion(),
 			});
+
 		});
 	};
 	return (
@@ -61,10 +65,22 @@ const Login = (props: any) => {
 					{
 						SOCIAL_BTN.map((i: any) => (
 							<>
-								<TouchableOpacity style={[styles.socialBtn, {
-									backgroundColor: i.type == true ? "#7583CA" : 'white',
-									borderColor: i.type == true ? "#7583CA" : '#000',
-								}]}>
+								<TouchableOpacity
+									onPress={() => {
+										googleLogin().then((res) => {
+											console.log('googleLogin', res);
+											// socialLoginApi({
+											// 	full_name: `${res?.givenName} ${res?.familyName}`,
+											// 	email: res?.email,
+											// 	social_id: res.id,
+											// 	signup_via: 'google',
+											// });
+										});
+									}}
+									style={[styles.socialBtn, {
+										backgroundColor: i.type == true ? "#7583CA" : 'white',
+										borderColor: i.type == true ? "#7583CA" : '#000',
+									}]}>
 									<Image
 										source={i.image}
 										style={{ width: 30, height: 30 }}
@@ -157,7 +173,12 @@ const Login = (props: any) => {
 							</TouchableOpacity>
 						</View>
 					</View>
-
+					<TouchableOpacity onPress={() =>
+						store.dispatch(updateAppStates({ is_authorized: true, }))}>
+						<Typography color={COLORS.primary} align='center'>
+							AS a guest
+						</Typography>
+					</TouchableOpacity>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</SafeAreaContainer>
@@ -247,77 +268,77 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
-// const socialIcon = () => {
-// 	const _applelogin = async () => {
-// 		const appleAuthRequestResponse = await appleAuth.performRequest({
-// 			requestedOperation: appleAuth.Operation.LOGIN,
-// 			// Note: it appears putting FULL_NAME first is important, see issue #293
-// 			requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
-// 		});
+const socialIcon = () => {
+	const _applelogin = async () => {
+		const appleAuthRequestResponse = await appleAuth.performRequest({
+			requestedOperation: appleAuth.Operation.LOGIN,
+			// Note: it appears putting FULL_NAME first is important, see issue #293
+			requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+		});
 
-// 		// get current authentication state for user
-// 		// /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-// 		const credentialState = await appleAuth.getCredentialStateForUser(
-// 			appleAuthRequestResponse.user,
-// 		);
+		// get current authentication state for user
+		// /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+		const credentialState = await appleAuth.getCredentialStateForUser(
+			appleAuthRequestResponse.user,
+		);
 
-// 		// use credentialState response to ensure the user is authenticated
-// 		if (credentialState === appleAuth.State.AUTHORIZED) {
-// 			console.log('appleAuthRequestResponse', appleAuthRequestResponse),
-// 				console.log('credentialState', credentialState),
-// 				socialLoginApi({
-// 					full_name: `${appleAuthRequestResponse.fullName.givenName}`,
-// 					email: appleAuthRequestResponse.email,
-// 					social_id: appleAuthRequestResponse.authorizationCode,
-// 					signup_via: 'apple',
-// 				});
-// 		}
-// 	}
-// 	return (
-// 		<View style={[commonStyles.flexJustRowAlign, { alignSelf: 'center', marginTop: 0, flex: 1 }]}>
-// 			<TouchableOpacity
-// 				onPress={() => {
-// 					googleLogin().then((res) => {
-// 						console.log('googleLogin', res);
-// 						socialLoginApi({
-// 							full_name: `${res?.givenName} ${res?.familyName}`,
-// 							email: res?.email,
-// 							social_id: res.id,
-// 							signup_via: 'google',
-// 						});
-// 					});
-// 				}}
-// 				style={styles.socialIconStyle}>
-// 				<Image source={IMAGES.google} style={{ width: 60, height: 60, resizeMode: 'cover' }} resizeMode={'cover'} />
-// 			</TouchableOpacity>
+		// use credentialState response to ensure the user is authenticated
+		if (credentialState === appleAuth.State.AUTHORIZED) {
+			console.log('appleAuthRequestResponse', appleAuthRequestResponse),
+				console.log('credentialState', credentialState),
+				socialLoginApi({
+					full_name: `${appleAuthRequestResponse.fullName.givenName}`,
+					email: appleAuthRequestResponse.email,
+					social_id: appleAuthRequestResponse.authorizationCode,
+					signup_via: 'apple',
+				});
+		}
+	}
+	return (
+		<View style={[commonStyles.flexJustRowAlign, { alignSelf: 'center', marginTop: 0, flex: 1 }]}>
+			<TouchableOpacity
+				onPress={() => {
+					googleLogin().then((res) => {
+						console.log('googleLogin', res);
+						socialLoginApi({
+							full_name: `${res?.givenName} ${res?.familyName}`,
+							email: res?.email,
+							social_id: res.id,
+							signup_via: 'google',
+						});
+					});
+				}}
+				style={styles.socialIconStyle}>
+				<Image source={IMAGES.google} style={{ width: 60, height: 60, resizeMode: 'cover' }} resizeMode={'cover'} />
+			</TouchableOpacity>
 
-// 			<TouchableOpacity
-// 				style={styles.socialIconStyle}
-// 			// onPress={() => {
-// 			// 	facebookLogin().then((res: any) => {
-// 			// 		console.log('facebookLogin', res);
+			<TouchableOpacity
+				style={styles.socialIconStyle}
+			// onPress={() => {
+			// 	facebookLogin().then((res: any) => {
+			// 		console.log('facebookLogin', res);
 
-// 			// 		if (res) {
-// 			// 			socialLoginApi({
-// 			// 				full_name: `${res?.first_name}`,
-// 			// 				email: res?.email,
-// 			// 				social_id: res.id,
-// 			// 				signup_via: 'facebook',
-// 			// 			});
-// 			// 		}
-// 			// 	});
-// 			// }}
-// 			>
-// 				<Image source={IMAGES.facebook} style={{ width: 50, height: 50, resizeMode: 'cover' }} resizeMode={'cover'} />
-// 			</TouchableOpacity>
+			// 		if (res) {
+			// 			socialLoginApi({
+			// 				full_name: `${res?.first_name}`,
+			// 				email: res?.email,
+			// 				social_id: res.id,
+			// 				signup_via: 'facebook',
+			// 			});
+			// 		}
+			// 	});
+			// }}
+			>
+				<Image source={IMAGES.facebook} style={{ width: 50, height: 50, resizeMode: 'cover' }} resizeMode={'cover'} />
+			</TouchableOpacity>
 
-// 			{Platform.OS == 'ios' ? (
-// 				<TouchableOpacity style={styles.socialIconStyle}
-// 					onPress={_applelogin}
-// 				>
-// 					<Image source={IMAGES.apple} style={{ width: 50, height: 50, resizeMode: 'cover' }} />
-// 				</TouchableOpacity>
-// 			) : null}
-// 		</View>
-// 	);
-// };
+			{Platform.OS == 'ios' ? (
+				<TouchableOpacity style={styles.socialIconStyle}
+					onPress={_applelogin}
+				>
+					<Image source={IMAGES.apple} style={{ width: 50, height: 50, resizeMode: 'cover' }} />
+				</TouchableOpacity>
+			) : null}
+		</View>
+	);
+};

@@ -7,8 +7,6 @@ import { removeItem, setItem } from '../../utils/localStorage';
 import store from '..';
 
 export const registerApi = async (data: any) => {
-	console.log('data',data);
-	
 	store.dispatch(enableLoader());
 	const formData = new FormData();
 	formData.append('first_name', data.first_name);
@@ -18,57 +16,68 @@ export const registerApi = async (data: any) => {
 	formData.append('address', data.address);
 	formData.append('gender', data.gender);
 	formData.append('password', data.password);
-	formData.append('user_role',data.user_role );
-	formData.append('profile_image', data.profile_image);
-	return post(`register`, formData, {}, true)
+	// formData.append('user_role',data.user_role );
+	formData.append('role_id',data.user_role );
+	formData.append('img_path', data.profile_image);
+	// formData.append('profile_image', data.profile_image);
+	return post(`sign-up`, formData, {}, true)
 	.then((res) => {
 		store.dispatch(disableLoader());
-		console.log( "ahsna .. " ,res);
-		if ('response' in res) {
+		console.log('signupRes',res);
+		if (res.status == 'success') {
+
 			store.dispatch(updateUserStates({
-					token: res.response.data.user.token,
-					user: res.response.data.user,
+				user: res.response.data,
 				})
 			);
-			setItem('user', res.response.data.user);
-			setItem('token', res.response.data.user.token);
-			store.dispatch(updateAppStates({is_authorized: true})
-			);
-		} else {
+			console.log('checkout',res.response.data);
+			setItem('user', res.response.data);
+			navigate('OTPScreen')
+			
+		} 
+		else {
 			errorHandler(res);
+			store.dispatch(showToast(res.message.email[0]))
 		}
 	})
-	.catch((error) => {
-		store.dispatch(disableLoader());
-		store.dispatch(showToast(error.message));
-		store.dispatch(disableLoader());
-	});
+	// .catch((error) => {
+	// 	console.log('err',error.message);
+		
+	// 	store.dispatch(disableLoader());
+	// 	store.dispatch(showToast(error.message));
+	// 	store.dispatch(disableLoader());
+	// });
 };
 export const loginApi = async (data: any) => {
 	store.dispatch(enableLoader());
-	return post(`login`, JSON.stringify(data))
+	return post(`sign-in`, JSON.stringify(data))
 		.then((res) => {
 			store.dispatch(disableLoader());
-			console.log(res);
-			if ('response' in res) {
+			console.log('LoginRes',res);
+			if (res.status == 200) {
 				store.dispatch(updateUserStates({
-						token: res.response.data.user.token,
-						user: res.response.data.user,
+					user: res.response.data,
 					})
 				);
-				setItem('user', res.response.data.user);
-				setItem('token', res.response.data.user.token);
-				store.dispatch(updateAppStates({is_authorized: true})
-				);
-			} else {
+				setItem('user', res.response.data);
+				if(res.status == 200){
+					store.dispatch(updateAppStates({ is_authorized: true, }));
+			}else{
+				navigate('OTPScreen', {
+					// whichRoute: 'LOGIN'
+				})
+			}
+			} 
+			else {
 				errorHandler(res);
+				store.dispatch(showToast(res.message))
 			}
 		})
-		.catch((error) => {
-			store.dispatch(disableLoader());
-			store.dispatch(showToast(error.message));
-			store.dispatch(disableLoader());
-		});
+		// .catch((res) => {
+		// 	store.dispatch(disableLoader());
+		// 	store.dispatch(showToast(res.message[0]));
+		// 	store.dispatch(disableLoader());
+		// });
 };
 export const socialLoginApi = async (data: any) => {
 	store.dispatch(enableLoader());
@@ -137,18 +146,13 @@ export const forgotApi = async (data: any, onSuccess: any) => {
 			store.dispatch(disableLoader());
 		});
 };
-export const OTPApi = async (data: any, onSuccess: any) => {
+export const OTPApi = async (data: any, login:any,) => {
 	store.dispatch(enableLoader());
-	return post(`verify-code`, JSON.stringify(data))
+	return post(login ? `sign-in-verification` : 'verification-code', JSON.stringify(data))
 		.then((res) => {
 			store.dispatch(disableLoader());
-			console.log('res', res);
-			if ('response' in res) {
-				return res;
-			} else {
-				errorHandler(res);
-				return false;
-			}
+			store.dispatch(updateAppStates({ is_authorized: true, }));
+
 		})
 		.catch((error) => {
 			store.dispatch(disableLoader());
@@ -208,7 +212,7 @@ export const updateUserApi = async (data: any) => {
 };
 export const changePasswordApi = async (data: any) => {
 	store.dispatch(enableLoader());
-	return post(`user/changeUserpassword`, JSON.stringify(data))
+	return post(`change-password`, JSON.stringify(data))
 		.then((res) => {
 			store.dispatch(disableLoader());
 			if ('response' in res) {
@@ -255,7 +259,7 @@ export const termsApi = async (data: any) => {
 };
 export const logoutApi = async (data: any) => {
 	store.dispatch(enableLoader());
-	return post(`user/logout`, JSON.stringify(data))
+	return post(`signout`, JSON.stringify(data))
 		.then((res) => {
 			store.dispatch(disableLoader());
 			if ('response' in res) {

@@ -26,9 +26,25 @@ import { logoutApi } from '../store/services/AuthServices';
 const DrawerScreen = (props: any) => {
     const userState = useSelector(selectUserState);
     const imageFromState = userState?.user?.profile_image;
+    const user_id = userState?.user.id;
     console.log('imageFromState', imageFromState);
 
     const { full_name: name, email, avatarImg } = userState.user;
+    const onLogout = () => {
+        Alert.alert('Logout', 'Do you want to logout?', [
+            {
+                text: 'Cancel',
+                onPress: () => { },
+            },
+            {
+                text: 'OK',
+                // onPress: () => {
+                //     store.dispatch(updateAppStates({ is_authorized: false, }));
+                // },
+                onPress: () => logoutApi({ devicetoken: '', user_id: user_id }),
+            },
+        ]);
+    };
     return (
         <SafeAreaContainer >
             <View style={styles.container}>
@@ -130,21 +146,7 @@ const styles = StyleSheet.create({
     },
 
 });
-const onLogout = () => {
-    Alert.alert('Logout', 'Do you want to logout?', [
-        {
-            text: 'Cancel',
-            onPress: () => { },
-        },
-        {
-            text: 'OK',
-            // onPress: () => {
-            //     store.dispatch(updateAppStates({ is_authorized: false, }));
-            // },
-            onPress: () => logoutApi({ device_token: '' }),
-        },
-    ]);
-};
+
 
 const DrawerContent = [
     {

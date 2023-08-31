@@ -8,6 +8,8 @@ import * as Validator from '../../../utils/Validator';
 import { changePasswordApi } from '../../../store/services/AuthServices';
 import { commonStyles } from '../../../style';
 import { onBack } from '../../../navigation/RootNavigation';
+import { useSelector } from 'react-redux';
+import { selectUserState } from '../../../store/selectors/userSelector';
 
 const ChangePassword = (props: any) => {
     const [errors, setErrors] = useState({});
@@ -26,6 +28,9 @@ const ChangePassword = (props: any) => {
     const ConfirmPassInput = React.createRef();
 
     const _onSubmit = () => {
+        const userState = useSelector(selectUserState);
+        const user_id = userState?.user.id;
+        console.log('user_id', user_id);
         let validateData = {
             old_password: currentPass,
             new_password: password,
@@ -35,9 +40,12 @@ const ChangePassword = (props: any) => {
             setErrors(err);
             if (err && Object.keys(err).length) return;
             changePasswordApi({
+                // current_password: currentPass,
+                // password: password,
+                // password_confirmation: confirmPass,
+                user_id: user_id,
                 current_password: currentPass,
-                password: password,
-                password_confirmation: confirmPass,
+                new_password: password
             });
         });
         onBack()
@@ -89,7 +97,7 @@ const ChangePassword = (props: any) => {
                                 </TouchableOpacity>
                             }
                         />
-                        <InputText
+                        {/* <InputText
                             style={{ margin: 10 }}
                             title={'CONFIRM PASSWORD'}
                             placeholder={'Enter Confirm password'}
@@ -110,7 +118,7 @@ const ChangePassword = (props: any) => {
                                     <Icon name={secureEntry2 ? 'eye-slash' : 'eye'} size={18} color={COLORS.halfWhite} />
                                 </TouchableOpacity>
                             }
-                        />
+                        /> */}
                     </View>
                     <Button
                         label='Submit'

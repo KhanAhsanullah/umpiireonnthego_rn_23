@@ -9,22 +9,21 @@ import { deleting, get, post } from './Http';
 import { removeItem, setItem } from '../../utils/localStorage';
 
 // Home Api
-export const getHomeApi = async (lat: string, long: string) => {
+export const getHomeApi = async () => {
 	store.dispatch(enableLoader());
-	return get(`home?lat=${lat}&lng=${long}`)
+	return get(`game-listing`)
 		.then((res) => {
-			console.log('check', `home?lat=${lat}&lng=${long}`);
-
 			store.dispatch(disableLoader());
-			console.log('aaa', res);
-			if ('response' in res) {
+			console.log('homeRes', res);
+			if (res.success == true) {
 				store.dispatch(
 					updateAppStates({
-						homeData: res.response.data,
+						homeData: res.data
 					})
 				);
-				console.log('home APi', res.response.data);
 			} else {
+				console.log('err');
+				
 				errorHandler(res);
 			}
 			return res;

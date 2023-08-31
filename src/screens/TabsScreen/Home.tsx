@@ -10,8 +10,18 @@ import IconIonic from 'react-native-vector-icons/Ionicons';
 
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../../navigation/RootNavigation';
+import { getHomeApi } from '../../store/services/AppServices';
+import { useSelector } from 'react-redux';
 const Home = (props: any) => {
+	const homeData = useSelector((state: any) => state.AppReducer.homeData);
+	console.log('homeData == >', homeData);
+	useEffect(() => {
+		getHomeApi()
+	}, []);
 	const [radioTab, setRadioTab] = useState('Open');
+	const [active, setActive] = useState(homeData.active);
+	const [close, setClose] = useState(homeData.close);
+	const [open, setOpen] = useState(homeData.open);
 	const changeTab = (item: any) => {
 		setRadioTab(item);
 	};
@@ -53,6 +63,75 @@ const Home = (props: any) => {
 			</View>
 		);
 	};
+	const HomeCard = ({ item }: any) => {
+		console.log('item', item);
+		let split = item.sport_skills.split(" ", 2)
+		console.log('split', split);
+
+		return (
+			<TouchableOpacity
+				onPress={() => navigate('CardDetails', {
+					title: item.title
+				})}
+				activeOpacity={0.9}
+				style={styles.registerView}>
+				<LinearGradient
+					colors={['#495BC1', '#BF2011']}
+					style={styles.cardStyle}>
+					<View style={commonStyles.flexJustRowAlign}>
+						<View style={styles.leftViewBox}>
+							<Image
+								source={IMAGES.Umpire}
+								style={{ width: 25, height: 25 }}
+								resizeMode='cover'
+							/>
+						</View>
+						<View>
+							<Typography color='#fff' size={20}>{item.title}</Typography>
+							<Typography color='#fff'>{item.location}</Typography>
+						</View>
+						<View style={{ alignItems: "center" }}>
+							<Image
+								source={IMAGES.Vector3}
+								style={{ width: 25, height: 25, marginBottom: 10 }}
+								resizeMode='contain'
+							/>
+							<Typography color='#fff'>{item.player_required}</Typography>
+						</View>
+					</View>
+					<View style={[commonStyles.lineBar, { width: "100%", marginVertical: 20 }]} />
+					<Typography color='#fff'>{item.time}</Typography>
+					<View style={commonStyles.flexJustRowAlign}>
+						<View>
+							<Typography color='#fff'>{item.sport_skills}</Typography>
+						</View>
+						<View>
+							<Typography color='#fff'>{item.player_required}</Typography>
+						</View>
+					</View>
+					<View style={[commonStyles.lineBar, { width: "100%", marginVertical: 20 }]} />
+					<View style={commonStyles.flexJustRowAlign}>
+						<View style={[styles.headerBkStyle, styles.userIcon, {
+							backgroundColor: item.teamPlayer == 'Full' ? COLORS.danger : '#43B67B'
+						}]}>
+							<IconFont name="users" color="#fff" size={20} />
+							<Typography style={{ marginLeft: 10, }} color="#fff">{item.player_required
+							}</Typography>
+						</View>
+
+						<TouchableOpacity onPress={() => navigate('AssignGame', {
+							title: "Edit Game"
+						})} style={commonStyles.flexRowAlign}>
+							<Icon name="playlist-edit" color="#fff" size={20} />
+							<Typography color="#fff" style={{ marginLeft: 10, }}>Edit Info</Typography>
+						</TouchableOpacity>
+					</View>
+				</LinearGradient>
+			</TouchableOpacity>
+		);
+	};
+
+
 	return (
 		<SafeAreaContainer safeArea={false}>
 			<ScrollView style={styles.container}>
@@ -63,7 +142,10 @@ const Home = (props: any) => {
 					<LocationTabPicker />
 				</View>
 				<FlatList
-					data={CARD_DATA}
+					data={radioTab == 'Open' ? homeData.open :
+						radioTab == 'Closed' ? homeData.close :
+							homeData.active
+					}
 					renderItem={(i) => HomeCard(i)}
 					ListEmptyComponent={() => {
 						return (
@@ -99,72 +181,6 @@ const HomeHeader = () => {
 				<Typography color={COLORS.primary}>+ Assign</Typography>
 			</TouchableOpacity>
 		</View>
-	);
-};
-const HomeCard = ({ item }: any) => {
-	return (
-		<TouchableOpacity
-			onPress={() => navigate('CardDetails', {
-				title: item.title
-			})}
-			activeOpacity={0.9}
-			style={styles.registerView}>
-			<LinearGradient
-				colors={['#495BC1', '#BF2011']}
-				style={styles.cardStyle}>
-				<View style={commonStyles.flexJustRowAlign}>
-					<View style={styles.leftViewBox}>
-						<Image
-							source={IMAGES.Umpire}
-							style={{ width: 25, height: 25 }}
-							resizeMode='cover'
-						/>
-					</View>
-					<View>
-						<Typography color='#fff' size={20}>{item.title}</Typography>
-						<Typography color='#fff'>{item.address}</Typography>
-					</View>
-					<View style={{ alignItems: "center" }}>
-						<Image
-							source={IMAGES.Vector3}
-							style={{ width: 25, height: 25, marginBottom: 10 }}
-							resizeMode='contain'
-						/>
-						<Typography color='#fff'>12 - 18</Typography>
-					</View>
-				</View>
-				<View style={[commonStyles.lineBar, { width: "100%", marginVertical: 20 }]} />
-				<Typography color='#fff'>{item.date}</Typography>
-				<View style={commonStyles.flexJustRowAlign}>
-					<View>
-						<Typography color='#fff'>Dribling Skills</Typography>
-						<Typography color='#fff'>Passing Skills</Typography>
-						<Typography color='#fff'>Speed & Agility</Typography>
-					</View>
-					<View>
-						<Typography color='#fff'>Shooting Skills</Typography>
-						<Typography color='#fff'>Game IQ</Typography>
-						<Typography color='#fff'>Ball Handing</Typography>
-					</View>
-				</View>
-				<View style={[commonStyles.lineBar, { width: "100%", marginVertical: 20 }]} />
-				<View style={commonStyles.flexJustRowAlign}>
-					<View style={[styles.headerBkStyle, styles.userIcon, {
-						backgroundColor: item.teamPlayer == 'Full' ? COLORS.danger : '#43B67B'
-					}]}>
-						<IconFont name="users" color="#fff" size={20} />
-						<Typography style={{ marginLeft: 10, }} color="#fff">{item.teamPlayer}</Typography>
-					</View>
-
-					<TouchableOpacity onPress={() => navigate('AssignGame', {
-						title: "Edit Game"
-					})} style={commonStyles.flexRowAlign}>
-						<Icon name="playlist-edit" color="#fff" size={20} />
-						<Typography color="#fff" style={{ marginLeft: 10, }}>Edit Info</Typography>
-					</TouchableOpacity>
-				</View>
-			</LinearGradient>
-		</TouchableOpacity>
 	);
 };
 

@@ -1,44 +1,50 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
-import { Loader, Typography } from '../../components/atoms';
+import { Button, Loader, Typography } from '../../components/atoms';
 import { COLORS, FONTSIZE } from '../../constants';
 import { ArrowRightIcon } from '../../components/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { TimerOTP } from '../../components/atoms/TimerOTP';
-import { showToast } from '../../store/actions/AppActions';
-import VerifyAccount from './Login/VerifyAccount';
+import { showToast, updateAppStates } from '../../store/actions/AppActions';
+
 import { forgetPasswordAction, verifyCodeAction } from '../../store/actions/UserActions';
 import { PopUpToast } from '../../containers/SafeAreaContainer';
 import { selectAppState } from '../../store/selectors/appSelector';
 import { navigate, replace } from '../../navigation/RootNavigation';
-import { OTPApi } from '../../store/services/AuthServices';
+import { OTPApi, loginApi } from '../../store/services/AuthServices';
 import { selectUserState } from '../../store/selectors/userSelector';
+import VerifyAccount from './VerifyAccount';
+import store from '../../store';
 
 const OTPScreen = (props: any) => {
 	const dispatch = useDispatch();
-	const { toast, loader } = useSelector(selectAppState);
+	const { toast, loader, fcmToken } = useSelector(selectAppState);
 	const [resend, setResend] = useState(false);
 	const [emptyPin, setEmptyPin] = useState(false);
-
 	const [disabled, setDisabled] = useState(true);
-
 	const [pin, setPin]: any = useState();
-	const userState = useSelector(selectUserState);
-	const email = userState?.user.email;
-	console.log('email check', email);
 
-	// const [email, setEmail] = useState('');
-	const params = props.route.params;
+	const userState = useSelector(selectUserState);
+	const user_id = userState?.user.id;
+	const email = userState?.user.email;
+	const { whichRoute } = props.routes.params
+	console.log('user_id', user_id);
+	console.log('pin', pin);
+	console.log('fcmToken', fcmToken);
+
 	const _onSubmit = () => {
-		OTPApi({ code: pin, email: props.route?.params?.paramEmail }).then((res) => {
-			if ('response' in res) {
-				props.navigation.navigate('ResetPassword', {
-					paramEmail: props.route?.params?.paramEmail,
-				});
-			}
-		});
-		// navigate('ResetPassword')
-	};
+		OTPApi(whichRoute == 'LOGIN' ? {
+			user_id: user_id,
+			verification_code: pin,
+			devicetoken: fcmToken
+		} :
+			{
+				email: email,
+				verification_code: pin,
+				devicetoken: fcmToken
+			}, whichRoute == 'LOGIN')
+	}
+
 	return (
 		<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null} style={{ flex: 1, backgroundColor: 'transparent' }}>
 			{loader && <Loader />}
@@ -54,15 +60,23 @@ const OTPScreen = (props: any) => {
 					{toast.show && <PopUpToast />}
 
 					<Typography textType='bold' size={FONTSIZE.XXL} color={COLORS.black} style={{ marginTop: 30 }}>
-						Enter 4 Digits Code
+						Enter 5 Digits Code
 					</Typography>
 
 					<Typography size={FONTSIZE.S} style={{ marginVertical: 10 }}>
-						Enter the 4 digits code that you received on your email.{' '}
+						Enter the 5 digits code that you received on your email.{' '}
 					</Typography>
 
 					<VerifyAccount onChange={setPin} emptyPin={emptyPin} setEmptyPin={setEmptyPin} />
-					<View
+					<Button
+						label='Submit'
+						onPress={() =>
+							_onSubmit()
+							// store.dispatch(updateAppStates({ is_authorized: true, }))
+							// navigate('Login')
+						}
+					/>
+					{/* <View
 						style={{
 							flexDirection: 'row',
 							justifyContent: 'space-between',
@@ -101,14 +115,16 @@ const OTPScreen = (props: any) => {
 										})
 									);
 									setDisabled(false);
-									_onSubmit();
-								} else {
-									dispatch(showToast(`Please enter the 4 digits code that you received on your email.`));
+									// _onSubmit();
+									navigate('Home')
 								}
+								//  else {
+								// 	dispatch(showToast(`Please enter the 5 digits code that you received on your email.`));
+								// }
 							}}>
 							<ArrowRightIcon />
 						</TouchableOpacity>
-					</View>
+					</View> */}
 				</View>
 			</View>
 		</KeyboardAvoidingView>

@@ -41,7 +41,7 @@ const AuthNavigation = () => {
 			<Stack.Screen name='Register' component={Register} />
 			<Stack.Screen name='Privacy' component={Privacy} />
 			<Stack.Screen name='Terms' component={Terms} />
-
+			<Stack.Screen name='OTPScreen' component={OTPScreen} options={{ presentation: 'transparentModal' }} />
 
 			{/* <Stack.Screen name='ForgetPassword' component={ForgetPassword} options={{ presentation: 'transparentModal' }} />
 			<Stack.Screen name='OTPScreen' component={OTPScreen} options={{ presentation: 'transparentModal' }} />

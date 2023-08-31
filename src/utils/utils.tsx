@@ -1,20 +1,20 @@
 import React from 'react';
-import {Alert, Dimensions} from 'react-native';
-import {COLORS, MAP_KEY, SRTIPE_PK} from '../constants';
+import { Alert, Dimensions } from 'react-native';
+import { COLORS, MAP_KEY, SRTIPE_PK } from '../constants';
 import ImagePicker from 'react-native-image-crop-picker';
 // import { disableLoader, enableLoader, showToast } from "../store/actions/AppActions";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import store from '../store';
-import {removeItem} from './localStorage';
+import { removeItem } from './localStorage';
 import moment from 'moment';
-import {StarIcon} from '../components/icons';
+import { StarIcon } from '../components/icons';
 import {
   disableLoader,
   enableLoader,
   showToast,
 } from '../store/actions/AppActions';
-import {updateUserStates} from '../store/actions/UserActions';
-const {width, height} = Dimensions.get('window');
+import { updateUserStates } from '../store/actions/UserActions';
+const { width, height } = Dimensions.get('window');
 
 export const getPlaces = (q: string) => {
   return new Promise((resolve, reject) => {
@@ -175,8 +175,11 @@ export const timeSince = (date: any) => {
 };
 
 export function errorHandler(res: any) {
+  console.log('ress', res);
+
   if ('error' in res) {
-    store.dispatch(showToast(res.error.messages[0]));
+
+    store.dispatch(showToast(res.error.messages.email[0]));
 
     switch (res.error.code) {
       case 401:
