@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { COLORS, IMAGES } from '../../constants';
 import { Button, Header, Typography } from '../../components/atoms';
@@ -10,8 +10,13 @@ import IconIonic from 'react-native-vector-icons/Ionicons';
 import IconMat from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../../navigation/RootNavigation';
+import { useSelector } from 'react-redux';
+import { navigateById } from '../../store/services/AppServices';
 const CardDetails = (props: any) => {
+	const id = props?.route?.params?._id
 	const [radioTab, setRadioTab] = useState('Details');
+	const cardData = useSelector((state: any) => state.AppReducer.cardData.data);
+	console.log('cardData ==>', cardData);
 	const changeTab = (item: any) => {
 		setRadioTab(item);
 	};
@@ -53,25 +58,30 @@ const CardDetails = (props: any) => {
 			</View>
 		);
 	}
+	useEffect(() => {
+		navigateById(id)
+	}, []);
 	return (
 		<SafeAreaContainer safeArea={false}>
 			<ScrollView style={styles.container}>
 				<View style={[commonStyles.headerView, styles.subContainer]}>
 					<Header
-						titleText='Intermediates B'
+						titleText={'asd'}
 						titleColor={COLORS.black}
 					/>
 				</View>
 				<View style={[commonStyles.cardWithShadow, { marginTop: -20 }]}>
 					<LocationTabPicker />
 				</View>
-				<HomeCard />
+				<HomeCard cardData={cardData} />
 			</ScrollView>
 		</SafeAreaContainer>
 	);
 };
 
-const HomeCard = ({ item }: any) => {
+const HomeCard = ({ cardData }: any) => {
+	console.log('itemCheck', cardData);
+
 	return (
 		<View style={styles.registerView}>
 			<LinearGradient
@@ -87,8 +97,8 @@ const HomeCard = ({ item }: any) => {
 							/>
 						</View>
 						<View style={{ marginLeft: 10 }}>
-							<Typography color='#fff' size={18}>INTERMEDIATE B</Typography>
-							<Typography size={12} color='#fff'>Abu Dhabi | Abu Dhabi city</Typography>
+							<Typography color='#fff' size={18}>{cardData?.title}</Typography>
+							<Typography size={12} color='#fff'>{cardData?.city || 'Abu Dhabi | Abu Dhabi city'}</Typography>
 						</View>
 					</View>
 					<View style={{ alignItems: "center" }}>
@@ -146,9 +156,9 @@ const HomeCard = ({ item }: any) => {
 					<View>
 						<View style={{ flexDirection: "row", alignItems: "center" }}>
 							<IconIonic name="information-circle" color={COLORS.white} size={20} />
-							<Typography color='#fff' style={{ marginLeft: 10 }}>DETAsad :</Typography>
+							<Typography color='#fff' style={{ marginLeft: 10 }}>Detail :</Typography>
 						</View>
-						<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remain essentially unchanged.</Typography>
+						<Typography color='#fff' size={10} style={{ marginLeft: 30 }}>{cardData?.details}</Typography>
 					</View>
 				</View>
 				<View style={{ marginVertical: 20 }}>

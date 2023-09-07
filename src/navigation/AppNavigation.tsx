@@ -22,6 +22,7 @@ import Applicant from '../screens/TabsScreen/Applicant';
 import Mission from '../screens/TabsScreen/Mission';
 import Terms from '../screens/TabsScreen/Profile/Terms';
 import ChangePassword from '../screens/TabsScreen/Profile/ChangePassword';
+import EditGame from '../screens/TabsScreen/EditGame';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -72,6 +73,7 @@ const AppNavigation = () => {
 			<Stack.Screen name='CardDetails' component={CardDetails} />
 			<Stack.Screen name='UmpireDetails' component={UmpireDetails} />
 			<Stack.Screen name='AssignGame' component={AssignGame} />
+			<Stack.Screen name='EditGame' component={EditGame} />
 			<Stack.Screen name='Applicant' component={Applicant} />
 			<Stack.Screen name='Mission' component={Mission} />
 			<Stack.Screen name='DrawerScreen' component={DrawerScreen} />

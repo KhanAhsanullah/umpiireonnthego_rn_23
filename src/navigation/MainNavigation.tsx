@@ -22,12 +22,12 @@ const Stack = createNativeStackNavigator();
 export default MainNavigation = () => {
 	const { splash, is_authorized } = useSelector((state: any) => state.AppReducer);
 	if (splash) return <Splash />;
-	console.log(is_authorized, splash, 'is_authorized');
+	// console.log(is_authorized, splash, 'is_authorized');
 
 	return (
 		<NavigationContainer ref={navigationRef}>
 			{/* <AppNavigation /> */}
-			{is_authorized ? <AppNavigation /> : <AuthNavigation />}
+			{!is_authorized ? <AppNavigation /> : <AuthNavigation />}
 		</NavigationContainer>
 	);
 };

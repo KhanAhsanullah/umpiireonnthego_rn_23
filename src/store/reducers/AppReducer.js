@@ -14,10 +14,11 @@ const initialState = {
 
   homeData: [],
   searchCategries: [],
-  filterData: [],
+  cardData: [],
   detailData: [],
   ratingData: [],
   categories: [],
+  umpireList: [],
   findDestination: [],
   searchFilter: [],
   previoueSearches: [],

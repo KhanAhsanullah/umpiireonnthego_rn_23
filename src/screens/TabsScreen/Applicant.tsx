@@ -7,8 +7,54 @@ import { commonStyles } from '../../style';
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../../navigation/RootNavigation';
 import Icon from "react-native-vector-icons/Ionicons";
+import { getUmpireList } from '../../store/services/AppServices';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 const Applicant = (props: any) => {
+	const umpireList = useSelector((state: any) => state.AppReducer.umpireList);
+	useEffect(() => {
+		getUmpireList()
+	}, []);
+	const HomeCard = ({ item }: any) => {
+		const dateTimeString = umpireList.created_at;
+		const momentObj = moment(dateTimeString);
+		const formattedTime = momentObj.format('HH:mm');
+		return (
+			<TouchableOpacity
+				onPress={() => navigate('UmpireDetails', {
+					title: item.title
+				})}
+				activeOpacity={0.9}
+				style={styles.registerView}>
+				<LinearGradient
+					colors={['#2C2CFD', '#01026F']}
+					style={styles.cardStyle}>
+					<View style={commonStyles.flexJustRowAlign}>
+						<View style={{ flexDirection: "row", alignItems: "center" }}>
+							<View style={styles.leftViewBox}>
+								<Image
+									source={IMAGES.Umpire}
+									style={{ width: 25, height: 25 }}
+									resizeMode='cover'
+								/>
+							</View>
+							<View style={{ marginLeft: 20 }}>
+								<Typography color='#fff' size={16} textType='heading'>{item?.request_belongs_to_user?.first_name}</Typography>
+								<Typography color='#fff' size={12}>{item?.request_belongs_to_user?.last_name}</Typography>
+							</View>
+						</View>
+						<View style={{ alignItems: "flex-end" }}>
+							<Typography color='#fff'>{formattedTime}</Typography>
+							<Icon name="md-checkmark-done-sharp" size={15}
+								color="#fff"
+							/>
+						</View>
+					</View>
+				</LinearGradient>
+			</TouchableOpacity>
+		);
+	};
 
 	return (
 		<SafeAreaContainer safeArea={false}>
@@ -25,7 +71,7 @@ const Applicant = (props: any) => {
 						colors={['#495BC1', '#BF2011']}
 						style={styles.cardStyle}>
 						<FlatList
-							data={CARD_DATA}
+							data={umpireList}
 							renderItem={(i) => HomeCard(i)}
 							ListEmptyComponent={() => {
 								return (
@@ -44,42 +90,7 @@ const Applicant = (props: any) => {
 	);
 };
 
-const HomeCard = ({ item }: any) => {
-	return (
-		<TouchableOpacity
-			onPress={() => navigate('UmpireDetails', {
-				title: item.title
-			})}
-			activeOpacity={0.9}
-			style={styles.registerView}>
-			<LinearGradient
-				colors={['#2C2CFD', '#01026F']}
-				style={styles.cardStyle}>
-				<View style={commonStyles.flexJustRowAlign}>
-					<View style={{ flexDirection: "row", alignItems: "center" }}>
-						<View style={styles.leftViewBox}>
-							<Image
-								source={IMAGES.Umpire}
-								style={{ width: 25, height: 25 }}
-								resizeMode='cover'
-							/>
-						</View>
-						<View style={{ marginLeft: 20 }}>
-							<Typography color='#fff' size={16} textType='heading'>{item.title}</Typography>
-							<Typography color='#fff' size={12}>{item.address}</Typography>
-						</View>
-					</View>
-					<View style={{ alignItems: "flex-end" }}>
-						<Typography color='#fff'>{item.date}</Typography>
-						<Icon name="md-checkmark-done-sharp" size={15}
-							color="#fff"
-						/>
-					</View>
-				</View>
-			</LinearGradient>
-		</TouchableOpacity>
-	);
-};
+
 const CARD_DATA = [
 	{
 		id: 1,

@@ -50,7 +50,7 @@ const Home = (props: any) => {
 									onPress={() => { changeTab(item.title) }}
 									style={[styles.tab]}
 								>
-									<Typography color={txtColor} size={14}>
+									<Typography color={txtColor} size={14} style={{ alignSelf: 'center', }}>
 										{item.title}
 									</Typography>
 								</TouchableOpacity>
@@ -71,7 +71,8 @@ const Home = (props: any) => {
 		return (
 			<TouchableOpacity
 				onPress={() => navigate('CardDetails', {
-					title: item.title
+					title: item.title,
+					_id: item.id
 				})}
 				activeOpacity={0.9}
 				style={styles.registerView}>
@@ -130,8 +131,6 @@ const Home = (props: any) => {
 			</TouchableOpacity>
 		);
 	};
-
-
 	return (
 		<SafeAreaContainer safeArea={false}>
 			<ScrollView style={styles.container}>
@@ -248,8 +247,8 @@ const styles = StyleSheet.create({
 		padding: 5,
 		borderRadius: 10,
 		backgroundColor: COLORS.bkColor,
-		justifyContent: "center",
-		alignItems: 'center'
+		// justifyContent: "center",
+		// alignItems: 'center'
 	},
 	tabBar: {
 		top: -20,
@@ -284,8 +283,8 @@ const styles = StyleSheet.create({
 	locationTabStyle: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		flexWrap: 'wrap',
-		justifyContent: 'space-between',
+		// flexWrap: 'wrap',
+		justifyContent: 'space-evenly',
 	},
 	tab: {
 		justifyContent: 'space-between',

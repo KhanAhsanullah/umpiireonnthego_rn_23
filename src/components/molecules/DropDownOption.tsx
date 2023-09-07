@@ -31,21 +31,21 @@ export const DropDownOption = (props: any) => {
 					},
 				});
 			}}
-			style={{ flex: 1 }}>
+			style={{ flex: 1, backgroundColor: "#fff", paddingHorizontal: 10, marginVertical: 15, borderRadius: 10, height: 50, alignItems: 'center' }}>
 			<Typography textType='semiBold' size={16}>
 				{title}
 			</Typography>
 			<View style={commonStyles.flexJustRowAlign}>
 				<View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 					{leftIcon && <LocationIcon fill={COLORS.primary} width={12} height={12} />}
-					<Typography textType='light'
-						color={selected ? COLORS.primary : COLORS.black}
-						size={12} style={{ marginLeft: 5, }}
+					<Typography
+						color={COLORS.black}
+						size={12} style={{ marginLeft: 5, marginTop: -10, }}
 						numberOfLines={1}>
 						{selected || placeholder}
 					</Typography>
 				</View>
-				<Icon name='angle-down' color={COLORS.black} style={{ marginLeft: 10 }} />
+				<Icon name='angle-down' color={COLORS.black} style={{ marginLeft: 10, marginTop: -10, }} />
 			</View>
 			<BottomSheet ref={actionSheet} />
 		</TouchableOpacity>

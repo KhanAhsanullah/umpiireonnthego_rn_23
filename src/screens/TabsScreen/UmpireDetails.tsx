@@ -11,7 +11,94 @@ import IconFont from 'react-native-vector-icons/FontAwesome';
 import IconFont5 from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
 import { navigate } from '../../navigation/RootNavigation';
+import { useSelector } from 'react-redux';
 const UmpireDetails = (props: any) => {
+	const HomeCard = () => {
+		const umpireList = useSelector((state: any) => state.AppReducer.umpireList);
+		console.log('umpireList', umpireList);
+		const user_data = umpireList[0].request_belongs_to_user
+		const game_data = umpireList[0].request_belongs_to_game
+		return (
+			<View style={styles.registerView}>
+				<LinearGradient
+					colors={['#495BC1', '#BF2011']}
+					style={styles.cardStyle}
+				>
+					<View style={styles.profileImg}>
+						<Image
+							source={IMAGES.Vector1}
+							style={{ width: 80, height: 80, }}
+							resizeMode='cover'
+						/>
+					</View>
+					<Typography size={20} color='#fff' style={{ alignSelf: 'center', marginVertical: 10, }}>{user_data?.first_name}</Typography>
+					<Typography size={20} color='#fff' style={{ alignSelf: 'center', }}>{user_data?.last_name}</Typography>
+					<View style={[commonStyles.lineBar, { width: "100%", marginVertical: 20 }]} />
+					<View style={commonStyles.flexJustRowAlign}>
+						<View>
+							<View style={{ flexDirection: "row", alignItems: "center" }}>
+								<Icon name="calendar-month" color={COLORS.white} size={20} />
+								<Typography color='#fff' style={{ marginLeft: 10 }}>EMAIL :</Typography>
+							</View>
+							<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>{user_data?.email}</Typography>
+						</View>
+						<View>
+							<View>
+								<View style={{ flexDirection: "row", alignItems: "center" }}>
+									<IconMat name="sports-soccer" color={COLORS.white} size={20} />
+									<Typography color='#fff' style={{ marginLeft: 10 }}>Games :</Typography>
+								</View>
+								<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>{game_data?.title}</Typography>
+							</View>
+						</View>
+					</View>
+
+					<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
+						<View>
+							<View style={{ flexDirection: "row", alignItems: "center" }}>
+								<Icon name="map-marker-radius" color={COLORS.white} size={20} />
+								<Typography color='#fff' style={{ marginLeft: 10 }}>ADDRESS :</Typography>
+							</View>
+							<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>{user_data?.address}</Typography>
+						</View>
+
+						<View>
+							<View>
+								<View style={{ flexDirection: "row", alignItems: "center" }}>
+									<IconFont name="user-circle" color={COLORS.white} size={20} />
+									<Typography color='#fff' style={{ marginLeft: 10 }}>Gender :</Typography>
+								</View>
+								<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>{user_data?.gender}</Typography>
+							</View>
+						</View>
+					</View>
+					<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
+						<View>
+							<View style={{ flexDirection: "row", alignItems: "center" }}>
+								<IconFont5 name="award" color={COLORS.white} size={20} />
+								<Typography color='#fff' style={{ marginLeft: 10 }}>EXPERINCE :</Typography>
+							</View>
+							<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>{user_data?.experience || "15 years of experience"}</Typography>
+						</View>
+					</View>
+
+					<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
+						<View>
+							<View style={{ flexDirection: "row", alignItems: "center" }}>
+								<IconIonic name="information-circle" color={COLORS.white} size={20} />
+								<Typography color='#fff' style={{ marginLeft: 10 }}>DETAILS :</Typography>
+							</View>
+							<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>{game_data?.details}</Typography>
+						</View>
+					</View>
+					<View style={{ marginVertical: 20 }}>
+						<Button label={'ACCEPT REQUEST'} onPress={() => { navigate('Mission') }} backgroundColor={COLORS.primary} borderRadius={10} />
+						<Button label={'REJECT REQUEST'} onPress={() => { navigate('Applicant') }} backgroundColor={COLORS.primary} borderRadius={10} />
+					</View>
+				</LinearGradient>
+			</View>
+		);
+	};
 	return (
 		<SafeAreaContainer safeArea={false}>
 			<ScrollView style={styles.container}>
@@ -46,88 +133,7 @@ const HomeHeader = (props: any) => {
 		</View>
 	);
 };
-const HomeCard = ({ item }: any) => {
-	return (
-		<View style={styles.registerView}>
-			<LinearGradient
-				colors={['#495BC1', '#BF2011']}
-				style={styles.cardStyle}
-			>
-				<View style={styles.profileImg}>
-					<Image
-						source={IMAGES.Vector1}
-						style={{ width: 80, height: 80, }}
-						resizeMode='cover'
-					/>
-				</View>
-				<Typography size={20} color='#fff' style={{ alignSelf: 'center', marginVertical: 10, }}>James Balkove</Typography>
-				<Typography size={20} color='#fff' style={{ alignSelf: 'center', }}>Umpire</Typography>
-				<View style={[commonStyles.lineBar, { width: "100%", marginVertical: 20 }]} />
-				<View style={commonStyles.flexJustRowAlign}>
-					<View>
-						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<Icon name="calendar-month" color={COLORS.white} size={20} />
-							<Typography color='#fff' style={{ marginLeft: 10 }}>EMAIL :</Typography>
-						</View>
-						<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>info@demilonk.com</Typography>
-					</View>
-					<View>
-						<View>
-							<View style={{ flexDirection: "row", alignItems: "center" }}>
-								<IconMat name="sports-soccer" color={COLORS.white} size={20} />
-								<Typography color='#fff' style={{ marginLeft: 10 }}>Games :</Typography>
-							</View>
-							<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>Baseket Ball</Typography>
-						</View>
-					</View>
-				</View>
 
-				<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
-					<View>
-						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<Icon name="map-marker-radius" color={COLORS.white} size={20} />
-							<Typography color='#fff' style={{ marginLeft: 10 }}>ADDRESS :</Typography>
-						</View>
-						<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>New York Avenue Arlington,{'\n'}TX, USA</Typography>
-					</View>
-
-					<View>
-						<View>
-							<View style={{ flexDirection: "row", alignItems: "center" }}>
-								<IconFont name="user-circle" color={COLORS.white} size={20} />
-								<Typography color='#fff' style={{ marginLeft: 10 }}>Gender :</Typography>
-							</View>
-							<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>Male</Typography>
-						</View>
-					</View>
-				</View>
-				<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
-					<View>
-						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<IconFont5 name="award" color={COLORS.white} size={20} />
-							<Typography color='#fff' style={{ marginLeft: 10 }}>EXPERINCE :</Typography>
-						</View>
-						<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>15 years of experience</Typography>
-					</View>
-				</View>
-
-				<View style={[commonStyles.flexJustRowAlign, { marginVertical: 20 }]}>
-					<View>
-						<View style={{ flexDirection: "row", alignItems: "center" }}>
-							<IconIonic name="information-circle" color={COLORS.white} size={20} />
-							<Typography color='#fff' style={{ marginLeft: 10 }}>DETAILS :</Typography>
-						</View>
-						<Typography color='#fff' size={12} style={{ marginLeft: 30 }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remain essentially unchanged.</Typography>
-					</View>
-				</View>
-				<View style={{ marginVertical: 20 }}>
-					<Button label={'ACCEPT REQUEST'} onPress={() => { navigate('Mission') }} backgroundColor={COLORS.primary} borderRadius={10} />
-					<Button label={'REJECT REQUEST'} onPress={() => { navigate('Applicant') }} backgroundColor={COLORS.primary} borderRadius={10} />
-				</View>
-			</LinearGradient>
-		</View>
-	);
-};
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,

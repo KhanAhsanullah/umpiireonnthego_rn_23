@@ -5,7 +5,52 @@ import { Header, Typography } from '../../components/atoms';
 import SafeAreaContainer from '../../containers/SafeAreaContainer';
 import { commonStyles } from '../../style';
 import LinearGradient from 'react-native-linear-gradient';
+import { getMissionApi } from '../../store/services/AppServices';
+import { WebView } from 'react-native-webview';
 const Mission = (props: any) => {
+	const [data, setData] = useState()
+	useEffect(() => {
+		getMissionApi()
+			.then((data) => setData(data))
+			.catch((err) => console.log('err', err));
+	}, [])
+	const HomeCard = ({ data }: any) => {
+		console.log('data2', data.data[0]?.img_path);
+		return (
+			<View style={styles.registerView}>
+				<LinearGradient
+					colors={['#495BC1', '#BF2011']}
+					style={styles.cardStyle}>
+					<View style={styles.profileImg}>
+						<Image
+							source={{ uri: data.data[0]?.img_path }}
+							style={{
+								borderRadius: 30,
+								width: 200,
+								height: 200,
+							}}
+							resizeMode='cover'
+						/>
+						{/* <Image source={{ uri: data.data[0]?.img_path }} style={styles.profileImg} resizeMode='cover' /> */}
+					</View>
+
+					<Typography color='#fff' align='center' style={{ marginVertical: 20, }}>{data.data[0].long_desc}</Typography>
+
+					{/* <View style={styles.container}>
+						<WebView
+							source={{
+								html: `<meta name="viewport" content="width=device-width, initial-scale=1.0">
+                     			 ${data.data[0].long_desc || 'data Privacy'}`,
+							}}
+							showsVerticalScrollIndicator={false}
+							style={{ width: '100%', flex: 1, }}
+						/>
+					</View> */}
+				</LinearGradient>
+			</View>
+		);
+	};
+
 	return (
 		<SafeAreaContainer safeArea={false}>
 			<ScrollView style={styles.container}>
@@ -15,43 +60,22 @@ const Mission = (props: any) => {
 						titleColor={COLORS.black}
 					/>
 				</View>
-				<HomeCard />
+				{
+					data == undefined ? null :
+						<HomeCard data={data} />
+
+				}
 			</ScrollView>
 		</SafeAreaContainer>
 	);
 };
 
-const HomeCard = ({ item }: any) => {
-	return (
-		<View style={styles.registerView}>
-			<LinearGradient
-				colors={['#495BC1', '#BF2011']}
-				style={styles.cardStyle}>
-				<View style={styles.profileImg}>
-					<Image
-						source={IMAGES.friends}
-						style={{ flex: 1 }}
-						resizeMode='cover'
-					/>
-				</View>
 
-				<Typography color='#fff' align='center' style={{ marginVertical: 20, }}>
-					"Introducing Assignors to Umpires and Umpires to Assignors, to be sure that every ball field has umpires 	and every game is covered in America and the World"
-					Umpire on the go started with 1 question, as my umpire buddies and I relaxed in the hot tub talking about our games and the plays that developed and did we get the calls right? We began discussing how short we are in the Umpire field and its true there are not enough umpires across the land. However I asked 1 question: " How many umpires do not know there are games available?"
-
-					That question was asked, Because I had Mike Fought a 40 year umpire vetern that has learned the system and took time to help me meet Assignors. Mike was my 1st umpire on the go app. Without Mike Fought, I would of never known, Icould go to Denver and umpire for a week, Arizona or California, I could umpire just weekends and make an extra $300-1000.00 a weekend.
-
-					With Umpire on the Go app, you will be able to find games where ever you are. Headed to Florida for Vacation, maybe driving through Georgia or Alabama, Long weekend inTexas, where ever you may be or are going you can now plan a head, meet assignors and meet umpire brotherhood.
-
-					This APP is here to help "LET The Kids Play" Without Umpires the Games cannot go on.</Typography>
-			</LinearGradient>
-		</View>
-	);
-};
 const styles = StyleSheet.create({
 	container: {
+		backgroundColor: COLORS.secondary,
 		flex: 1,
-		backgroundColor: COLORS.secondary
+		padding: 20,
 	},
 	subContainer: {
 		paddingVertical: 50,

@@ -38,10 +38,10 @@ const DrawerScreen = (props: any) => {
             },
             {
                 text: 'OK',
-                // onPress: () => {
-                //     store.dispatch(updateAppStates({ is_authorized: false, }));
-                // },
-                onPress: () => logoutApi({ devicetoken: '', user_id: user_id }),
+                onPress: () => {
+                    store.dispatch(updateAppStates({ is_authorized: false, }));
+                },
+                // onPress: () => logoutApi({ devicetoken: '', user_id: user_id }),
             },
         ]);
     };

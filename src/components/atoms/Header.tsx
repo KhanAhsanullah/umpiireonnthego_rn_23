@@ -27,6 +27,8 @@ export const Header = (props: Props) => {
 		rightIcon2,
 		titleText = "",
 		leftIconColor = COLORS.black,
+		rightIconColor = COLORS.black,
+		rightIconColor2 = COLORS.black,
 		titleColor = COLORS.white,
 		style = {},
 	}: any = props;
@@ -54,7 +56,7 @@ export const Header = (props: Props) => {
 					<View style={{ flexDirection: "row", alignSelf: "flex-end" }}>
 						{rightIcon && (
 							<TouchableOpacity onPress={onPressRight} style={{ flex: 1 }}>
-								<Icon name={rightIcon} style={{ marginRight: 20, }} size={20} color={COLORS.white} />
+								<Icon name={rightIcon} style={{ marginRight: 20, }} size={20} color={rightIconColor} />
 							</TouchableOpacity>
 						)}
 						{rightIcon2 && (
@@ -64,7 +66,7 @@ export const Header = (props: Props) => {
 								<IconRight name='dot-single' color={COLORS.black} size={25} style={styles.dotStyle} />
 								<TouchableOpacity
 									onPress={onPressRight2}>
-									<IonIcon name={rightIcon2} size={22} color={COLORS.white} />
+									<IonIcon name={rightIcon2} size={22} color={rightIconColor2} />
 								</TouchableOpacity>
 							</TouchableOpacity>
 						)}

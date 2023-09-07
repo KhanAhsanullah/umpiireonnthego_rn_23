@@ -10,7 +10,7 @@ import { DropDownOption } from '../../components/molecules/DropDownOption';
 import { getGameList } from '../../store/services/AppServices';
 import { useSelector } from 'react-redux';
 
-const AssignGame = (props: any) => {
+const EditGame = (props: any) => {
 	const [title, setTitle] = useState('');
 	const [city, setCity] = useState('');
 	const [location, setLocation] = useState('');
@@ -30,8 +30,7 @@ const AssignGame = (props: any) => {
 	const [visible, setVisible] = useState(false);
 	const [gameModal, setGameModal] = useState(false);
 	const [selectImg, setSelectImg] = useState('');
-	// const imageFromState = userState?.user?.profile_image;
-	const titleHeader = props.route.params.title;
+
 	const categories = useSelector((state: any) => state.AppReducer.categories);
 	console.log('categories ==>', categories);
 	const [category, setCategory] = useState([]);
@@ -82,10 +81,8 @@ const AssignGame = (props: any) => {
 			<ScrollView style={styles.container}>
 				<View style={[commonStyles.headerView, styles.subContainer]}>
 					<Header
-						titleText={titleHeader}
+						titleText='Edit Game'
 						titleColor={COLORS.black}
-						rightIcon="edit"
-						onPressRight={() => navigate('EditGame')}
 					/>
 				</View>
 				<View style={{ margin: 20 }}>
@@ -347,5 +344,5 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 });
-export default AssignGame;
+export default EditGame;
 
