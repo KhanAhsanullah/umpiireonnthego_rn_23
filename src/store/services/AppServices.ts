@@ -118,7 +118,8 @@ export const getUmpireList= () => {
 			store.dispatch(disableLoader());
 		});
 };
-export const registerApi = async (data: any) => {
+export const registerGame = async (data: any) => {
+	console.log('dataCheck',data);
 	store.dispatch(enableLoader());
 	const formData = new FormData();
 	formData.append('title', data.title);
@@ -127,30 +128,54 @@ export const registerApi = async (data: any) => {
 	formData.append('time', data.time);
 	formData.append('date', data.date);
 	formData.append('sport_skills', data.sport_skills);
+	formData.append('player_required', data.player_required);
 	formData.append('details', data.details);
-	// formData.append('user_role',data.user_role );
-	formData.append('role_id',data.user_role );
+	formData.append('status',data.status );
+	formData.append('user_id',data.user_id );
+	formData.append('type_id',data.type_id );
 	formData.append('img_path', data.profile_image);
-	// formData.append('profile_image', data.profile_image);
 	return post(`create-game`, formData, {}, true)
 	.then((res) => {
-		store.dispatch(disableLoader());
-		console.log('signupRes',res);
+		console.log('response',res);
+		
+		// store.dispatch(disableLoader());
 		// if (res.status == 'success') {
-
 		// 	store.dispatch(updateUserStates({
-		// 		user: res.response.data,
+				
 		// 		})
 		// 	);
-		// 	console.log('checkout',res.response.data);
-		// 	setItem('user', res.response.data);
-		// 	navigate('OTPScreen')
-			
 		// } 
-		// else {
-		// 	errorHandler(res);
-		// 	store.dispatch(showToast(res.message.email[0]))
-		// }
+		
+	})
+};
+export const updateGame = async (data: any) => {
+	console.log('dataCheck',data);
+	store.dispatch(enableLoader());
+	const formData = new FormData();
+	formData.append('title', data.title);
+	formData.append('city', data.city);
+	formData.append('location', data.location)
+	formData.append('time', data.time);
+	formData.append('date', data.date);
+	formData.append('sport_skills', data.sport_skills);
+	formData.append('player_required', data.player_required);
+	formData.append('details', data.details);
+	formData.append('status',data.status );
+	formData.append('user_id',data.user_id );
+	formData.append('type_id',data.type_id );
+	formData.append('img_path', data.profile_image);
+	return post(`create-game`, formData, {}, true)
+	.then((res) => {
+		console.log('response',res);
+		
+		// store.dispatch(disableLoader());
+		// if (res.status == 'success') {
+		// 	store.dispatch(updateUserStates({
+				
+		// 		})
+		// 	);
+		// } 
+		
 	})
 };
 

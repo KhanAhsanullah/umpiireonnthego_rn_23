@@ -64,10 +64,7 @@ const Home = (props: any) => {
 		);
 	};
 	const HomeCard = ({ item }: any) => {
-		console.log('item', item);
 		let split = item.sport_skills.split(" ", 2)
-		console.log('split', split);
-
 		return (
 			<TouchableOpacity
 				onPress={() => navigate('CardDetails', {
@@ -120,8 +117,10 @@ const Home = (props: any) => {
 							}</Typography>
 						</View>
 
-						<TouchableOpacity onPress={() => navigate('AssignGame', {
-							title: "Edit Game"
+						<TouchableOpacity onPress={() => navigate('EditGame', {
+							title: "Edit Game",
+							params: item
+
 						})} style={commonStyles.flexRowAlign}>
 							<Icon name="playlist-edit" color="#fff" size={20} />
 							<Typography color="#fff" style={{ marginLeft: 10, }}>Edit Info</Typography>

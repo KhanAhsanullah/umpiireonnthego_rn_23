@@ -7,17 +7,20 @@ import { commonStyles } from '../../style';
 import ImagePicker from 'react-native-image-crop-picker';
 import { navigate } from '../../navigation/RootNavigation';
 import { DropDownOption } from '../../components/molecules/DropDownOption';
-import { getGameList } from '../../store/services/AppServices';
+import { getGameList, registerGame } from '../../store/services/AppServices';
 import { useSelector } from 'react-redux';
 
 const EditGame = (props: any) => {
-	const [title, setTitle] = useState('');
-	const [city, setCity] = useState('');
-	const [location, setLocation] = useState('');
-	const [time, setTime] = useState('');
+	const data = props.route.params.params
+
+	const [title, setTitle] = useState(data.title);
+	const [city, setCity] = useState(data);
+	const [location, setLocation] = useState(data.location);
+	const [time, setTime] = useState(data.time);
 	const [date, setDate] = useState('');
-	const [sports, setSports] = useState('');
-	const [details, setDetails] = useState('');
+	const [player_required, setRequired] = useState(data.player_required);
+	const [sport_skills, setSports] = useState(data.sport_skills);
+	const [details, setDetails] = useState(data.details);
 	const [errors, setErrors]: any = useState({});
 
 	const TitleInput: any = React.createRef();
@@ -30,10 +33,11 @@ const EditGame = (props: any) => {
 	const [visible, setVisible] = useState(false);
 	const [gameModal, setGameModal] = useState(false);
 	const [selectImg, setSelectImg] = useState('');
-
+	const titleHeader = props.route.params.title;
 	const categories = useSelector((state: any) => state.AppReducer.categories);
-	console.log('categories ==>', categories);
-	const [category, setCategory] = useState([]);
+	const [category, setCategory] = useState(['Select an Option']);
+	const [option, setOption] = useState(['Open']);
+
 	useEffect(() => {
 		getGameList()
 	}, [])
@@ -76,12 +80,28 @@ const EditGame = (props: any) => {
 				setVisible(false);
 			});
 	};
+	// const onSubmit = () => {
+	// 	registerGame({
+	// 		title: title,
+	// 		city: city,
+	// 		location: location,
+	// 		time: time,
+	// 		date: date,
+	// 		sport_skills: sport_skills,
+	// 		player_required: player_required,
+	// 		details: details,
+	// 		status: tabView.filter((i) => option[0] == i.title)[0].id,
+	// 		user_id: '12',
+	// 		img_path: selectImg,
+	// 		type_id: '1'
+	// 	});
+	// }
 	return (
 		<SafeAreaContainer safeArea={false}>
 			<ScrollView style={styles.container}>
 				<View style={[commonStyles.headerView, styles.subContainer]}>
 					<Header
-						titleText='Edit Game'
+						titleText={titleHeader}
 						titleColor={COLORS.black}
 					/>
 				</View>
@@ -177,11 +197,19 @@ const EditGame = (props: any) => {
 						}}
 
 					/>
-					{/* <InputText
+					<DropDownOption
+						options={tabView.map((i: any) => i.title)}
+						selected={option}
+						onSelect={(i: any) => {
+							setOption(tabView[i]?.title);
+						}}
+
+					/>
+					<InputText
 						cardStyle={styles.cardStyle}
-						placeholder={'Sports'}
-						onChangeText={(text: string) => setSports(text)}
-						value={sports}
+						placeholder={'Player required'}
+						onChangeText={(text: string) => setRequired(text)}
+						value={player_required}
 						error={errors.email}
 						autoCapitalize={'none'}
 						keyboardType={'email-address'}
@@ -190,7 +218,23 @@ const EditGame = (props: any) => {
 						onSubmitEditing={() => DetailsInput.current && DetailsInput.current.focus()}
 						leftIconVisibility={false}
 						allowSpacing={false}
-					/> */}
+					/>
+					<InputText
+						cardStyle={styles.cardStyle}
+						placeholder={'Sports Skills'}
+						onChangeText={(text: string) => setSports(text)}
+						value={sport_skills}
+						multiline={true}
+						error={errors.email}
+						autoCapitalize={'none'}
+						keyboardType={'email-address'}
+						returnKeyType={'done'}
+						inputRef={DetailsInput}
+						onSubmitEditing={() => Keyboard.dismiss()}
+						leftIconVisibility={false}
+						allowSpacing={false}
+					// inputStyle={{ paddingVertical: 30, backgroundColor: '#fff', }}
+					/>
 					<InputText
 						// cardStyle={styles.cardStyle}
 						placeholder={'Details'}
@@ -208,7 +252,11 @@ const EditGame = (props: any) => {
 						inputStyle={{ paddingVertical: 30, backgroundColor: '#fff', }}
 					/>
 					<Button label={'Assign Game'}
-						onPress={() => setGameModal(true)}
+						onPress={() => {
+							onSubmit()
+							// setGameModal(true)
+						}
+						}
 						backgroundColor={COLORS.primary}
 						borderRadius={10}
 					/>
@@ -267,7 +315,25 @@ const EditGame = (props: any) => {
 	);
 };
 
+const tabView = [
+	{
+		id: 1,
+		title: 'Open',
+		type: true
+	},
+	{
+		id: 2,
+		title: 'Active',
+		type: false
 
+	},
+	{
+		id: 3,
+		title: 'Closed',
+		type: false
+
+	},
+]
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,

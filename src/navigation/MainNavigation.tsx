@@ -27,7 +27,7 @@ export default MainNavigation = () => {
 	return (
 		<NavigationContainer ref={navigationRef}>
 			{/* <AppNavigation /> */}
-			{!is_authorized ? <AppNavigation /> : <AuthNavigation />}
+			{is_authorized ? <AppNavigation /> : <AuthNavigation />}
 		</NavigationContainer>
 	);
 };

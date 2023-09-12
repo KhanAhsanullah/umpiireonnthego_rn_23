@@ -18,6 +18,7 @@ import IconIonic from 'react-native-vector-icons/Ionicons';
 import store from '../store';
 import { updateAppStates } from '../store/actions/AppActions';
 import { logoutApi } from '../store/services/AuthServices';
+import { getMissionApi } from '../store/services/AppServices';
 
 // import { logoutApi } from '../../store/services/AuthServices';
 // import { useSelector } from 'react-redux';
@@ -27,7 +28,6 @@ const DrawerScreen = (props: any) => {
     const userState = useSelector(selectUserState);
     const imageFromState = userState?.user?.profile_image;
     const user_id = userState?.user.id;
-    console.log('imageFromState', imageFromState);
 
     const { full_name: name, email, avatarImg } = userState.user;
     const onLogout = () => {
@@ -45,6 +45,12 @@ const DrawerScreen = (props: any) => {
             },
         ]);
     };
+    const [data, setData] = useState()
+    useEffect(() => {
+        getMissionApi()
+            .then((data) => setData(data))
+            .catch((err) => console.log('err', err));
+    }, [])
     return (
         <SafeAreaContainer >
             <View style={styles.container}>
@@ -54,19 +60,19 @@ const DrawerScreen = (props: any) => {
                     <IconIonic name='menu' size={26} color={COLORS.primary} />
                 </TouchableOpacity>
                 <View>
-                    {/* <Image
-                        source={avatarImg || IMAGES.Umpire}
-                        style={{ width: 150, height: 150, }}
-                        resizeMode="contain"
-                    /> */}
-                    {imageFromState == null ? (
+                    <Image
+                        source={{ uri: data?.data[0]?.img_path }}
+                        style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
+                        resizeMode='cover'
+                    />
+                    {/* {imageFromState == null ? (
                         <Image source={IMAGES.Umpire} style={{
                             width: 150, height: 150, borderRadius: 150 / 2
                         }} resizeMode='cover' />
 
                     ) : (
                         <Image source={{ uri: imageFromState }} style={{ width: 150, height: 150, borderRadius: 150 / 2 }} resizeMode='cover' />
-                    )}
+                    )} */}
                     <Typography color={COLORS.white} style={{ margin: 20 }}>On The Go</Typography>
                 </View>
                 {
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
     },
     headerBkStyle: {
         position: 'absolute',
-        right: 0,
+        right: 10,
         top: 20,
         padding: 10,
         width: 50,

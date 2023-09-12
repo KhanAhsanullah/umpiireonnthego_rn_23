@@ -38,12 +38,16 @@ export const DropDownOption = (props: any) => {
 			<View style={commonStyles.flexJustRowAlign}>
 				<View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
 					{leftIcon && <LocationIcon fill={COLORS.primary} width={12} height={12} />}
-					<Typography
-						color={COLORS.black}
-						size={12} style={{ marginLeft: 5, marginTop: -10, }}
-						numberOfLines={1}>
-						{selected || placeholder}
-					</Typography>
+					{
+						placeholder &&
+						<Typography
+							color={COLORS.black}
+							size={12} style={{ marginLeft: 5, marginTop: -10, }}
+							numberOfLines={1}>
+							{selected || placeholder}
+						</Typography>
+					}
+
 				</View>
 				<Icon name='angle-down' color={COLORS.black} style={{ marginLeft: 10, marginTop: -10, }} />
 			</View>

@@ -31,7 +31,6 @@ const Login = (props: any) => {
 	const _onSignin = () => {
 		let validateData = { email, password };
 		console.log('fcmToken', fcmToken);
-
 		Validator.validate(validateData).then(async (err) => {
 			setErrors(err);
 			if (err && Object.keys(err).length) return;

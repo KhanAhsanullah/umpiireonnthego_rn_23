@@ -7,7 +7,7 @@ import { commonStyles } from '../../style';
 import ImagePicker from 'react-native-image-crop-picker';
 import { navigate } from '../../navigation/RootNavigation';
 import { DropDownOption } from '../../components/molecules/DropDownOption';
-import { getGameList } from '../../store/services/AppServices';
+import { getGameList, registerGame, registerUmpire } from '../../store/services/AppServices';
 import { useSelector } from 'react-redux';
 
 const AssignGame = (props: any) => {
@@ -16,7 +16,8 @@ const AssignGame = (props: any) => {
 	const [location, setLocation] = useState('');
 	const [time, setTime] = useState('');
 	const [date, setDate] = useState('');
-	const [sports, setSports] = useState('');
+	const [player_required, setRequired] = useState('');
+	const [sport_skills, setSports] = useState('');
 	const [details, setDetails] = useState('');
 	const [errors, setErrors]: any = useState({});
 
@@ -30,11 +31,12 @@ const AssignGame = (props: any) => {
 	const [visible, setVisible] = useState(false);
 	const [gameModal, setGameModal] = useState(false);
 	const [selectImg, setSelectImg] = useState('');
-	// const imageFromState = userState?.user?.profile_image;
 	const titleHeader = props.route.params.title;
 	const categories = useSelector((state: any) => state.AppReducer.categories);
-	console.log('categories ==>', categories);
-	const [category, setCategory] = useState([]);
+	const [category, setCategory] = useState(['Select an Option']);
+	const [option, setOption] = useState(['Open']);
+	console.log('option', option);
+
 	useEffect(() => {
 		getGameList()
 	}, [])
@@ -77,6 +79,22 @@ const AssignGame = (props: any) => {
 				setVisible(false);
 			});
 	};
+	const onSubmit = () => {
+		registerGame({
+			title: title,
+			city: city,
+			location: location,
+			time: time,
+			date: date,
+			sport_skills: sport_skills,
+			player_required: player_required,
+			details: details,
+			status: tabView.filter((i) => option[0] == i.title)[0].id,
+			user_id: '12',
+			img_path: selectImg,
+			type_id: '1'
+		});
+	}
 	return (
 		<SafeAreaContainer safeArea={false}>
 			<ScrollView style={styles.container}>
@@ -84,8 +102,6 @@ const AssignGame = (props: any) => {
 					<Header
 						titleText={titleHeader}
 						titleColor={COLORS.black}
-						rightIcon="edit"
-						onPressRight={() => navigate('EditGame')}
 					/>
 				</View>
 				<View style={{ margin: 20 }}>
@@ -180,11 +196,19 @@ const AssignGame = (props: any) => {
 						}}
 
 					/>
-					{/* <InputText
+					<DropDownOption
+						options={tabView.map((i: any) => i.title)}
+						selected={option}
+						onSelect={(i: any) => {
+							setOption(tabView[i]?.title);
+						}}
+
+					/>
+					<InputText
 						cardStyle={styles.cardStyle}
-						placeholder={'Sports'}
-						onChangeText={(text: string) => setSports(text)}
-						value={sports}
+						placeholder={'Player required'}
+						onChangeText={(text: string) => setRequired(text)}
+						value={player_required}
 						error={errors.email}
 						autoCapitalize={'none'}
 						keyboardType={'email-address'}
@@ -193,7 +217,23 @@ const AssignGame = (props: any) => {
 						onSubmitEditing={() => DetailsInput.current && DetailsInput.current.focus()}
 						leftIconVisibility={false}
 						allowSpacing={false}
-					/> */}
+					/>
+					<InputText
+						cardStyle={styles.cardStyle}
+						placeholder={'Sports Skills'}
+						onChangeText={(text: string) => setSports(text)}
+						value={sport_skills}
+						multiline={true}
+						error={errors.email}
+						autoCapitalize={'none'}
+						keyboardType={'email-address'}
+						returnKeyType={'done'}
+						inputRef={DetailsInput}
+						onSubmitEditing={() => Keyboard.dismiss()}
+						leftIconVisibility={false}
+						allowSpacing={false}
+					// inputStyle={{ paddingVertical: 30, backgroundColor: '#fff', }}
+					/>
 					<InputText
 						// cardStyle={styles.cardStyle}
 						placeholder={'Details'}
@@ -211,7 +251,11 @@ const AssignGame = (props: any) => {
 						inputStyle={{ paddingVertical: 30, backgroundColor: '#fff', }}
 					/>
 					<Button label={'Assign Game'}
-						onPress={() => setGameModal(true)}
+						onPress={() => {
+							onSubmit()
+							// setGameModal(true)
+						}
+						}
 						backgroundColor={COLORS.primary}
 						borderRadius={10}
 					/>
@@ -270,7 +314,25 @@ const AssignGame = (props: any) => {
 	);
 };
 
+const tabView = [
+	{
+		id: 1,
+		title: 'Open',
+		type: true
+	},
+	{
+		id: 2,
+		title: 'Active',
+		type: false
 
+	},
+	{
+		id: 3,
+		title: 'Closed',
+		type: false
+
+	},
+]
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
